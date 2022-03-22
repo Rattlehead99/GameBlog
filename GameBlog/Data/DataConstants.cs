@@ -47,6 +47,7 @@
         public class Rating
         {
             public const int MinRating = 0;
+            public const int MaxRating = 10;
         }
 
     }

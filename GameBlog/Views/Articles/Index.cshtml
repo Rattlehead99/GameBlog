@@ -1,9 +1,5 @@
 ﻿@model AllArticlesViewModel
 
-@{
-    ViewData["Title"] = "Home Page";
-}
-
 @if(!Model.Articles.Any())
 {
     <h1>No articles available right now</h1>
@@ -21,11 +17,10 @@ else
         </div>
         <div class="col-auto d-none d-lg-block">
           <img src="@article.ImageUrl" class="img-thumbnail float-right">
-          <a href="#" class="btn btn-primary flex-fill">Read</a>
+           <a href="#" class="btn btn-primary">Read</a>
         </div>
       </div>
     </div>
     }
 </div>
 }
-

@@ -19,6 +19,11 @@ namespace GameBlog.Data.Models
         [StringLength(ContentMaxLength)]
         public string Content { get; set; }
 
+        [Url]
+        public string ImageUrl { get; set; }
+
+        public bool Approved { get; set; }
+
         [ForeignKey(nameof(User))]
         public string UserId { get; set; }
 

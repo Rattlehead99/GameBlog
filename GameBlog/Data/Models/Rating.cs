@@ -19,6 +19,6 @@
         public User User { get; set; }
 
         [Range(MinRating, int.MaxValue)]
-        public int RatingValue { get; set; }
+        public double RatingValue { get; set; } 
     }
 }
