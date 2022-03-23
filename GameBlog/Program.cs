@@ -1,4 +1,5 @@
 using GameBlog.Data;
+using GameBlog.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,8 +13,9 @@ builder.Services.AddDbContext<GameBlogDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<GameBlogDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 WebApplication? app = builder.Build();

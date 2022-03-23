@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using GameBlog.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 
 namespace GameBlog.Data
 {
-    public class GameBlogDbContext : IdentityDbContext
+    public class GameBlogDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public DbSet<Article> Articles { get; set; }
 
@@ -14,8 +15,6 @@ namespace GameBlog.Data
         public DbSet<Rating> Ratings { get; set; }
 
         public DbSet<Comment> Comments { get; set; }
-
-        public DbSet<User> Users { get; set; }
 
         public GameBlogDbContext(DbContextOptions<GameBlogDbContext> options)
             : base(options)

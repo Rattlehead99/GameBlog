@@ -1,29 +1,12 @@
 ﻿namespace GameBlog.Data.Models
 {
+    using Microsoft.AspNetCore.Identity;
     using System.ComponentModel.DataAnnotations;
 
     using static DataConstants.User;
 
-    public class User
+    public class User : IdentityUser<Guid>
     {
-        [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-
-        [Required]
-        [StringLength(UserNameMaxLength)]
-        public string UserName { get; set; }
-
-        [Required]
-        [StringLength(PasswordMaxLength)]
-        public string Password { get; set; }
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [StringLength(FullNameMaxLength)]
-        public string FullName { get; set; }
 
         [Required]
         [Range(MinReputation, int.MaxValue)]
