@@ -21,7 +21,7 @@ namespace GameBlog.Controllers
         {
             var articlesQuery = db.Articles.AsQueryable();
 
-            var articles = articlesQuery.Select(a => new ArticleListingViewModel
+            var articles = articlesQuery.Select(a => new ArticleViewModel
             {
                 Id = a.Id,
                 Content = a.Content,

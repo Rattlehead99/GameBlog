@@ -1,11 +1,11 @@
 ﻿using GameBlog.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using GameBlog.Infrastructure;
 
 namespace GameBlog.Data
 {
-    public class GameBlogDbContext : IdentityDbContext
+    public class GameBlogDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public DbSet<Article> Articles { get; set; }
 

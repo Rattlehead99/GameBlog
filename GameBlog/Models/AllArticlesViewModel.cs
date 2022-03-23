@@ -4,6 +4,6 @@
     {
         public string Search { get; set; }
 
-        public IEnumerable<ArticleListingViewModel> Articles { get; set; } = new List<ArticleListingViewModel>();
+        public IEnumerable<ArticleViewModel> Articles { get; set; } = new List<ArticleViewModel>();
     }
 }

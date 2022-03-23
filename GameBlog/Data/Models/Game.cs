@@ -7,7 +7,7 @@
     public class Game
     {
         [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         [StringLength(NameMaxLength)]

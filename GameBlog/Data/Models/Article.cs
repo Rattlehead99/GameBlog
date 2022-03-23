@@ -9,7 +9,7 @@ namespace GameBlog.Data.Models
     public class Article
     {
         [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         [StringLength(TitleMaxLength)]
@@ -25,9 +25,9 @@ namespace GameBlog.Data.Models
         public bool Approved { get; set; }
 
         [ForeignKey(nameof(User))]
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
-        public User User { get; set; }
+        public User? User { get; set; }
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }

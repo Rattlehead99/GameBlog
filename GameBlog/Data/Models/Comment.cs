@@ -9,19 +9,19 @@ namespace GameBlog.Data.Models
     public class Comment
     {
         [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         [StringLength(CommentMaxLength)]
         public string Content { get; set; }
 
         [ForeignKey(nameof(User))]
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         public User User { get; set; }
 
         [ForeignKey(nameof(Article))]
-        public string ArticleId { get; set; }
+        public Guid ArticleId { get; set; }
 
         public Article Article { get; set; }
     }
