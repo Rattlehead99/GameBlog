@@ -145,14 +145,15 @@ namespace GameBlog.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(ArticleViewModel article) 
+        [ActionName("Delete")]
+        public IActionResult DeleteForm([FromForm]Guid id) 
         {
             if (!ModelState.IsValid)
             {
-                return View(article);
+                return BadRequest();
             }
 
-            var articleData = db.Articles.Find(article.Id);
+            var articleData = db.Articles.Find(id);
 
             if (articleData == null)
             {
