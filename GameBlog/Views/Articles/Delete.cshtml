@@ -1,9 +1,9 @@
 ﻿@model ArticleViewModel
 
-<form method="post" asp-action="Edit">
+<form method="post" asp-controller="Articles" asp-action="Delete">
     <div class="border-bottom p-3 mt-4">
         <div class="row pb-2">
-            <h2 class="text-primary">Edit Article</h2>
+            <h2 class="text-primary">Delete Article</h2>
             <hr />
         </div>
         
@@ -11,23 +11,23 @@
 
         <div class="mb-3">
             <label asp-for="Title"></label>
-            <input asp-for="Title" class="form-control"/>
+            <input asp-for="Title" class="form-control" disabled/>
             <span asp-validation-for="Title" class="text-danger"></span>
         
         </div>
          <div class="mb-3">
             <label asp-for="Content">Content</label>
-            <textarea asp-for="Content" class="form-control"></textarea>
+            <textarea asp-for="Content" class="form-control" disabled></textarea>
             <span asp-validation-for="Content" class="text-danger"></span>
         </div>
         
         <div class="mb-3">
             <label asp-for="ImageUrl">Image URL</label>
-            <input asp-for="ImageUrl" class="form-control"/>
+            <input asp-for="ImageUrl" class="form-control" disabled />
             <span asp-validation-for="ImageUrl" class="text-danger"></span>
         </div>
         
-        <button type="submit" class="btn btn-primary">Edit</button>
+        <button type="submit" class="btn btn-primary">Delete</button>
         <a asp-controller="Articles" asp-action="Index" class="btn btn-secondary"> Back to List</a>
     </div>
 </form>

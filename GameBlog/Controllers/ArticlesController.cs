@@ -52,7 +52,7 @@ namespace GameBlog.Controllers
         {
 
             var user = await userManager.GetUserAsync(User);
-        
+
 
             if (!ModelState.IsValid)
             {
@@ -80,32 +80,86 @@ namespace GameBlog.Controllers
         public IActionResult Edit(Guid id)
         {
             Article? article = db.Articles.SingleOrDefault(a => a.Id == id);
-
-            return View(article);
+            
+            var articleView = new ArticleViewModel
+            {
+                Approved = article.Approved,
+                Comments = article.Comments,
+                Content = article.Content,
+                Id = id,
+                ImageUrl = article.ImageUrl,
+                Title = article.Title,
+            };
+            return View(articleView);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(ArticleViewModel article)
+        public IActionResult Edit(ArticleViewModel article)
         {
             if (!ModelState.IsValid)
             {
                 return View(article);
             }
 
-            var user = await userManager.GetUserAsync(User);
+            var articleData = db.Articles.Find(article.Id);
 
-            var articleData = new Article
+            if (articleData == null)
             {
-                Id = article.Id,
-                Approved = false,
-                Comments = article.Comments,
-                Content = article.Content,
-                ImageUrl = article.ImageUrl,
-                Title = article.Title,
-                UserId = user.Id
-            };
+                return NotFound();
+            }
+
+            articleData.Approved = article.Approved;
+            articleData.Comments = article.Comments;
+            articleData.Content = article.Content;
+            articleData.ImageUrl = article.ImageUrl;
+            articleData.Title = article.Title;
 
             db.Articles.Update(articleData);
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Articles");
+        }
+
+        //GET
+        public IActionResult Delete(Guid id)
+        {
+            Article? article = db.Articles.Find(id);
+
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            var articleView = new ArticleViewModel
+            {
+                Approved=article.Approved,
+                Comments=article.Comments,
+                Content=article.Content,
+                Id=id,
+                ImageUrl = article.ImageUrl,
+                Title=article.Title,
+                UserId=id
+            };
+
+            return View(articleView);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(ArticleViewModel article) 
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(article);
+            }
+
+            var articleData = db.Articles.Find(article.Id);
+
+            if (articleData == null)
+            {
+                return NotFound();
+            }
+
+            db.Articles.Remove(articleData);
             db.SaveChanges();
 
             return RedirectToAction("Index", "Articles");
