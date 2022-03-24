@@ -21,6 +21,9 @@
         [StringLength(GenreMaxLength)]
         public string Genre { get; set; }
 
+        [Url]
+        public string ImageUrl { get; set; }
+
         public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
     }
 }

@@ -1,0 +1,29 @@
+﻿@model AllGamesViewModel
+
+@if(!Model.Games.Any())
+{
+    <h1>No articles available right now</h1>
+}
+else
+{
+<div class="row mb-2">
+   
+    @foreach(var game in Model.Games)
+    {
+     <div class="col-md-4 offset-2">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="">
+          <h3 class="d-inline-block mb-2 text-primary">@game.Name</h3>
+        </div>
+        <div class="col-auto d-none d-lg-block">
+          <img src="@game.ImageUrl" class="img-thumbnail float-right">
+           <a href="#" class="btn btn-primary">Details</a>
+           <a asp-controller="Articles" asp-action="Add" asp-route-id="@game.Id" class="btn btn-secondary">Add</a>
+           <a asp-controller="Articles" asp-action="Edit" asp-route-id="@game.Id" class="btn btn-secondary">Edit</a>
+           <a asp-controller="Articles" asp-action="Delete" asp-route-id="@game.Id" class="btn btn-secondary">Delete</a>
+        </div>
+      </div>
+    </div>
+    }
+</div>
+}
