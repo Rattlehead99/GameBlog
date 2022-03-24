@@ -76,6 +76,50 @@ namespace GameBlog.Controllers
 
             return RedirectToAction("Index");
         }
+
+        //GET:
+        public IActionResult Edit(Guid id)
+        {
+            Game? game = db.Games.SingleOrDefault(x => x.Id == id);
+
+            var gameView = new GameViewModel
+            {
+                Id = game.Id,
+                Description = game.Description,
+                Genre=game.Genre,
+                ImageUrl = game.ImageUrl,
+                Name=game.Name,
+                Ratings=game.Ratings
+            };
+
+            return View(gameView);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(GameViewModel game)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(game);
+            }
+
+            var gameData = db.Games.Find(game.Id);
+
+            if (gameData == null)
+            {
+                return NotFound();
+            }
+
+            gameData.Description = game.Description;
+            gameData.ImageUrl = game.ImageUrl;
+            gameData.Name = game.Name;
+            gameData.Genre = game.Genre;
+
+            db.Games.Update(gameData);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
            
     }
 }
