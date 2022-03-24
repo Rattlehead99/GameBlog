@@ -121,5 +121,49 @@ namespace GameBlog.Controllers
             return RedirectToAction("Index");
         }
            
+        //GET:
+        public IActionResult Delete(Guid? id)
+        {
+            var game = db.Games.Find(id);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            var gameModel = new GameViewModel
+            {
+                Description = game.Description,
+                Genre = game.Genre,
+                Id = game.Id,
+                ImageUrl = game.ImageUrl,
+                Name = game.Name,
+                Ratings = game.Ratings
+            };
+
+            return View(gameModel);
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        public IActionResult DeleteForm(Guid? id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var game = db.Games.Find(id);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            db.Games.Remove(game);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
     }
 }
