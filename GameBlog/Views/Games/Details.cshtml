@@ -1,0 +1,38 @@
+﻿@model GameViewModel
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<div id="main-content" class="blog-page">
+    <div class="container row-cols-3">
+        <div class="row card">
+            <div class="">
+                <div class="body">
+                    <h1 class="text-center">@Model.Name</h1>
+                    <div class="img-post">
+                        <img class="col-md-12 col-lg-12" src="@Model.ImageUrl" alt="First slide">
+                    </div>
+                    <div class="card">
+                    <p>Genre: @Model.Genre </p>
+                    </div>
+                    <div class="card">
+                    <p>Description: @Model.Description </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="header">
+                        @if(Model.Ratings.Count() == 0)
+                        {
+                            <h2>Game Rating: None</h2>
+                        }
+                        else
+                        {
+                            <h2>Game Rating: @Model.Ratings.Average(r => r.RatingValue)</h2>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>

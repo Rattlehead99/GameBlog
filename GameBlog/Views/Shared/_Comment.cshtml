@@ -1,0 +1,7 @@
+﻿@model CommentViewModel
+
+<div class="form-group">
+    <textarea asp-for="@Model.Content" rows="4" class="form-control no-resize" placeholder="Please type what you want..."></textarea>
+     <span asp-validation-for="@Model.Content" class="text-danger"></span>
+</div>
+

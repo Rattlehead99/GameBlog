@@ -18,7 +18,7 @@ else
         </div>
         <div class="col-auto d-none d-lg-block">
           <img src="@game.ImageUrl" class="img-thumbnail float-right">
-           <a href="#" class="btn btn-primary">Details</a>
+           <a asp-controller="Games" asp-action="Details" asp-route-id="@game.Id" class="btn btn-primary">Details</a>
            <a asp-controller="Games" asp-action="Add" asp-route-id="@game.Id" class="btn btn-secondary">Add</a>
            <a asp-controller="Games" asp-action="Edit" asp-route-id="@game.Id" class="btn btn-secondary">Edit</a>
            <a asp-controller="Games" asp-action="Delete" asp-route-id="@game.Id" class="btn btn-secondary">Delete</a>
