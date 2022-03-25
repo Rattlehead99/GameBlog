@@ -3,6 +3,7 @@ using GameBlog.Data.Models;
 using GameBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace GameBlog.Controllers
@@ -164,6 +165,38 @@ namespace GameBlog.Controllers
             db.SaveChanges();
 
             return RedirectToAction("Index", "Articles");
+        }
+
+        //GET
+        public IActionResult Details(Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var article = db.Articles
+                .Include(a => a.Comments)
+                .ThenInclude(u => u.User)
+                .FirstOrDefault(a => a.Id ==  id);
+
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            var articleView = new ArticleViewModel
+            {
+                Approved = article.Approved,
+                Comments = article.Comments,
+                Content = article.Content,
+                Id = id,
+                ImageUrl = article.ImageUrl,
+                Title = article.Title,
+                UserId = id
+            };
+
+            return View(articleView);
         }
     }
 }

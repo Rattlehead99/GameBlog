@@ -1,0 +1,87 @@
+﻿@model ArticleViewModel
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<div id="main-content" class="blog-page">
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-12 ">
+                
+                <div class="card single_post">
+                     <div class="card">
+                    <div class="body search">
+                        <div class="input-group m-b-0">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-search"></i></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Search...">
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="body">
+                        <h1 class="text-center">@Model.Title</h1>
+                        <div class="img-post">
+                            <img class="d-block img-fluid" src="@Model.ImageUrl" alt="First slide">
+                        </div>
+                        <p>@Model.Content</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="header">
+                        <h2>Comment Count: @Model.Comments.Count</h2>
+                    </div>
+                        
+                    <div class="body">
+                        <ul class="comment-reply list-unstyled">
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <li class="row clearfix">
+                                    <!-- <div class="icon-box col-md-2 col-4"><img class="img-fluid img-thumbnail" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Awesome Image"></div> -->
+                                    <div class="text-box col-md-10 col-8 p-l-0 p-r0">
+                                        <h5 class="m-b-0">@comment.User.UserName</h5>
+                                        <p>@comment.Content</p>
+                                        <ul class="list-inline">
+                                            @*<li><a href="javascript:void(0);">Mar 09 2018</a></li>
+                                            <li><a href="javascript:void(0);">Reply</a></li>*@
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="header">
+                        <h2 class="offset-mb-4">Leave a reply</h2>
+                    </div>
+                    <div class="body">
+                        <div class="comment-form">
+                            <form class="row clearfix">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Your Name">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Email Address">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <textarea rows="4" class="form-control no-resize" placeholder="Please type what you want..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-block btn-primary">SUBMIT</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
