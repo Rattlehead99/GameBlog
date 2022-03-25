@@ -21,7 +21,7 @@ else
         </div>
         <div class="col-auto d-none d-lg-block">
           <img src="@article.ImageUrl" class="img-thumbnail float-right">
-          <a href="#" class="btn btn-primary flex-fill">Read</a>
+          <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="btn btn-primary">Read</a>
         </div>
       </div>
     </div>
