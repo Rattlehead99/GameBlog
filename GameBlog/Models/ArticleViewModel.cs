@@ -21,6 +21,8 @@ namespace GameBlog.Models
 
         public bool Approved { get; set; }
 
+        public Comment NewComment { get; set; } = new Comment();
+
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     }

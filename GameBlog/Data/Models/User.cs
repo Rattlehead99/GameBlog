@@ -12,6 +12,9 @@
         [Range(MinReputation, int.MaxValue)]
         public int Reputation { get; set; }
 
+        [Url]
+        public string ImageUrl { get; set; }
+
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         public ICollection<Rating> Ratings { get; set; } = new List<Rating>();

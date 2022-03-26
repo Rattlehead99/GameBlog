@@ -15,6 +15,8 @@ namespace GameBlog.Data.Models
         [StringLength(CommentMaxLength)]
         public string Content { get; set; }
 
+        public DateTime PostDate { get; set; } = DateTime.UtcNow;
+
         [ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
 

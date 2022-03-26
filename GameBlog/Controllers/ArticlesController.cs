@@ -188,7 +188,7 @@ namespace GameBlog.Controllers
             var articleView = new ArticleViewModel
             {
                 Approved = article.Approved,
-                Comments = article.Comments,
+                Comments = article.Comments.OrderByDescending(c=> c.PostDate).ToList(),
                 Content = article.Content,
                 Id = id,
                 ImageUrl = article.ImageUrl,
@@ -197,6 +197,38 @@ namespace GameBlog.Controllers
             };
 
             return View(articleView);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostComment(CommentViewModel comment)
+        {
+            
+            var user = await userManager.GetUserAsync(User);
+
+            if (!ModelState.IsValid)
+            {
+                return View(comment);  
+            }
+
+            var articleData = db.Articles
+                .Any(a => a.Id == comment.ArticleId);
+
+            if (!articleData)
+            {
+                return NotFound();
+            }
+
+            var commentData = new Comment
+            {
+                ArticleId = comment.ArticleId,
+                UserId = user.Id,
+                Content = comment.Content
+            };
+
+            db.Comments.Add(commentData);
+            db.SaveChanges();
+
+            return RedirectToAction(nameof(Details), new { id = comment.ArticleId });
         }
     }
 }
