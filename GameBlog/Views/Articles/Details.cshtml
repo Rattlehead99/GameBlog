@@ -72,8 +72,7 @@
                                     @*<partial name="~/Views/Shared/_Comment.cshtml"/>*@
 
                                     <div class="form-group">
-                                        <textarea value="@Model.NewComment.Content" name="@nameof(CommentViewModel.Content)" rows="4" class="form-control no-resize" placeholder="Please type what you want..."></textarea>
-                                        <span asp-validation-for="@Model.NewComment.Content" class="text-danger"></span>
+                                        <textarea name="@nameof(CommentViewModel.Content)" rows="4" class="form-control no-resize" placeholder="Please type what you want..."></textarea>
                                     </div>
 
                                     <button type="submit" class="btn btn-block btn-primary">SUBMIT</button>

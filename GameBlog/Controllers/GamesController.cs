@@ -196,5 +196,47 @@ namespace GameBlog.Controllers
 
             return View(gameView);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RateGame(RatingViewModel rating)
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            if (!ModelState.IsValid)
+            {
+                return View(rating);
+            }
+
+            var gameData = db.Games.Any(g => g.Id == rating.GameId);
+
+            if (!gameData)
+            {
+                return NotFound();
+            }
+
+            var currentRating = db.Ratings.FirstOrDefault(r => r.UserId == user.Id);
+            
+            if (currentRating != null)
+            {
+                currentRating.RatingValue = rating.RatingValue;
+
+                db.Ratings.Update(currentRating);
+                db.SaveChanges();
+
+                return RedirectToAction(nameof(Details), new { id = rating.GameId });
+            }
+
+            var ratingData = new Rating
+            {
+                GameId = rating.GameId,
+                RatingValue = rating.RatingValue,
+                UserId = user.Id
+            };
+
+            db.Ratings.Add(ratingData);
+            db.SaveChanges();
+
+            return RedirectToAction(nameof(Details), new { id = rating.GameId });
+        }
     }
 }

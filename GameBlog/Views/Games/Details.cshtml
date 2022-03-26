@@ -12,15 +12,15 @@
                         <img class="col-md-12 col-lg-12" src="@Model.ImageUrl" alt="First slide">
                     </div>
                     <div class="card">
-                    <p>Genre: @Model.Genre </p>
+                        <p>Genre: @Model.Genre </p>
                     </div>
                     <div class="card">
-                    <p>Description: @Model.Description </p>
+                        <p>Description: @Model.Description </p>
                     </div>
                 </div>
                 <div class="card">
                     <div class="header">
-                        @if(Model.Ratings.Count() == 0)
+                        @if (Model.Ratings.Count() == 0)
                         {
                             <h2>Game Rating: None</h2>
                         }
@@ -28,6 +28,24 @@
                         {
                             <h2>Game Rating: @Model.Ratings.Average(r => r.RatingValue)</h2>
                         }
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="header">
+
+                        <form method="post" asp-action="RateGame" asp-controller="Games">
+
+                            <div class="form-group">
+                                <input value="@Model.Id" name="GameId" hidden class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <input type="number" name="RatingValue" step="0.5">
+                            </div>
+
+                            <button type="submit" class="btn btn-block btn-primary">Rate</button>
+                        </form>
+
                     </div>
                 </div>
             </div>

@@ -52,7 +52,7 @@ namespace GameBlog.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Articles");
+                    b.ToTable("Articles", (string)null);
                 });
 
             modelBuilder.Entity("GameBlog.Data.Models.Comment", b =>
@@ -81,7 +81,7 @@ namespace GameBlog.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("GameBlog.Data.Models.Game", b =>
@@ -111,7 +111,7 @@ namespace GameBlog.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Games");
+                    b.ToTable("Games", (string)null);
                 });
 
             modelBuilder.Entity("GameBlog.Data.Models.Rating", b =>
@@ -132,7 +132,7 @@ namespace GameBlog.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("GameBlog.Data.Models.User", b =>
@@ -154,10 +154,6 @@ namespace GameBlog.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
