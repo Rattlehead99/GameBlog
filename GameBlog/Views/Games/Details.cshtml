@@ -40,7 +40,11 @@
                             </div>
 
                             <div class="form-group">
-                                <input type="number" name="RatingValue" step="0.5">
+                                <input value="@Model.Ratings" name="Ratings" hidden class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <input type="number" name="RatingValue" step="0.5" placeholder="1" min="1" max="10">
                             </div>
 
                             <button type="submit" class="btn btn-block btn-primary">Rate</button>

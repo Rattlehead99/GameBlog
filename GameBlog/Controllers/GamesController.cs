@@ -214,7 +214,7 @@ namespace GameBlog.Controllers
                 return NotFound();
             }
 
-            var currentRating = db.Ratings.FirstOrDefault(r => r.UserId == user.Id);
+            var currentRating = db.Ratings.FirstOrDefault(r => r.UserId == user.Id && r.GameId == rating.GameId);
             
             if (currentRating != null)
             {

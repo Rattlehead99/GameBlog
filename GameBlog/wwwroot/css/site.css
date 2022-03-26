@@ -20,3 +20,21 @@ body {
 {
     margin-left: 33%;
 }
+
+.left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #3d231b;
+    height: 100%;
+    color: #FFF;
+}
+
+.right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000;
+    height: 100%;
+    color: #3d231b;
+}
