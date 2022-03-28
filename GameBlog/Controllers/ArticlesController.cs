@@ -22,7 +22,7 @@ namespace GameBlog.Controllers
 
         public IActionResult Index(string searchText)
         {
-            var articlesQuery = db.Articles.AsQueryable();
+            var articlesQuery = db.Articles.OrderByDescending(a => a.PostDate).AsQueryable();
 
             if (!String.IsNullOrEmpty(searchText))
             {

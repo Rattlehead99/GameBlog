@@ -7,7 +7,7 @@
             public const int TitleMinLength = 8;
             public const int TitleMaxLength = 100;
 
-            public const int ContentMinLength = 100;
+            public const int ContentMinLength = 10;
             public const int ContentMaxLength = 5000;
         }
 

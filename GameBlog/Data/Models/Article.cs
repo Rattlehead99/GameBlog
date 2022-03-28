@@ -29,6 +29,8 @@ namespace GameBlog.Data.Models
 
         public User? User { get; set; }
 
+        public DateTime PostDate { get; set; } = DateTime.UtcNow;
+
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

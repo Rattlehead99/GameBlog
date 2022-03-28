@@ -24,6 +24,8 @@
         [Url]
         public string ImageUrl { get; set; }
 
+        public DateTime PostDate { get; set; } = DateTime.UtcNow;
+
         public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
     }
 }

@@ -30,11 +30,11 @@
                         }
                     </div>
                 </div>
+
                 <div class="card">
                     <div class="header">
 
                         <form method="post" asp-action="RateGame" asp-controller="Games">
-
                             <div class="form-group">
                                 <input value="@Model.Id" name="GameId" hidden class="form-control" />
                                 <span asp-validation-for="@Model.Id" class="text-danger"></span>
@@ -51,7 +51,6 @@
 
                             <button type="submit" class="btn btn-block btn-primary">Rate</button>
                         </form>
-
                     </div>
                 </div>
             </div>

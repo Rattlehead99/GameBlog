@@ -18,9 +18,12 @@ namespace GameBlog.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult Index(string searchText)
+        public IActionResult Index(string searchText, int pageIndex)
         {
-            var games = db.Games.AsQueryable();
+            int pageSize = 6;
+
+
+            var games = db.Games.OrderBy(g => g.Name).Skip(pageIndex*pageSize).Take(pageSize).AsQueryable();
 
             if (!String.IsNullOrEmpty(searchText))
             {
