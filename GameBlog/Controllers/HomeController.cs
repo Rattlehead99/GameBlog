@@ -17,9 +17,15 @@ namespace GameBlog.Controllers
             this.db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchText)
         {
             var articlesQuery = db.Articles.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchText))
+            {
+                articlesQuery = articlesQuery
+                    .Where(s => s.Title.Contains(searchText) || s.Content.Contains(searchText));
+            }
 
             var articles = articlesQuery.Select(a => new ArticleViewModel
             {
@@ -31,6 +37,7 @@ namespace GameBlog.Controllers
                 Approved = a.Approved
             })
             .ToList();
+
 
             return View(new AllArticlesViewModel
             {

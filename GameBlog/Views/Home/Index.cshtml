@@ -4,28 +4,52 @@
     ViewData["Title"] = "Home Page";
 }
 
-@if(!Model.Articles.Any())
+    <form method="post" asp-action="Index" asp-controller="Home">
+        <div class="card single_post">
+            <div class="card">
+                <div class="body search">
+                    <div class="input-group m-b-0">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        </div>
+                        <input type="text" name="searchText" class="form-control" placeholder="Search...">
+                        <input class="btn btn-info" type="submit" value="Search"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+@if (!Model.Articles.Any())
 {
     <h1>No articles available right now</h1>
 }
 else
 {
-<div class="row mb-2">
-   
-    @foreach(var article in Model.Articles)
-    {
-     <div class="col-md-4 offset-2">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="">
-          <h3 class="d-inline-block mb-2 text-primary">@article.Title</h3>
-        </div>
-        <div class="col-auto d-none d-lg-block">
-          <img src="@article.ImageUrl" class="img-thumbnail float-right">
-          <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="btn btn-primary">Read</a>
-        </div>
-      </div>
+    <div class="row mb-2">
+        @foreach (var article in Model.Articles)
+        {
+            @if (article.Approved == true)
+            {
+                <div class="col-md-4 offset-2">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="">
+                            <h3 class="d-inline-block mb-2 text-primary">@article.Title</h3>
+                        </div>
+                        <div class="col-auto d-lg-block">
+                            <img src="@article.ImageUrl" class="img-thumbnail float-right">
+
+                            <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="btn btn-primary">Read</a>
+
+                            <form method="post" asp-action="Approve" asp-controller="Articles">
+                                <input asp-for="@article.Id" name="Id" hidden />
+                                <input class="btn btn-dark" type="submit" value="Disapprove" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
     </div>
-    }
-</div>
 }
 

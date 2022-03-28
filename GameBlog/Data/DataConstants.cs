@@ -7,7 +7,7 @@
             public const int TitleMinLength = 8;
             public const int TitleMaxLength = 100;
 
-            public const int CotentMinLength = 100;
+            public const int ContentMinLength = 100;
             public const int ContentMaxLength = 5000;
         }
 
@@ -19,7 +19,7 @@
 
         public class User
         {
-            public const int UserNameMaxLength = 40;
+            public const int UserNameMaxLength = 60;
             public const int UserNameMinLength = 4;
 
             public const int PasswordMaxLength = 32;

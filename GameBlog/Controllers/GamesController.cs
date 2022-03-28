@@ -18,9 +18,15 @@ namespace GameBlog.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchText)
         {
             var games = db.Games.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchText))
+            {
+                games = games
+                    .Where(s => s.Name.Contains(searchText) || s.Description.Contains(searchText));
+            }
 
             var gamesData = games.Select(g => new GameViewModel
             {

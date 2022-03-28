@@ -20,9 +20,15 @@ namespace GameBlog.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchText)
         {
             var articlesQuery = db.Articles.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchText))
+            {
+                articlesQuery = articlesQuery
+                    .Where(s => s.Title.Contains(searchText) || s.Content.Contains(searchText));
+            }
 
             var articles = articlesQuery.Select(a => new ArticleViewModel
             {
@@ -229,6 +235,37 @@ namespace GameBlog.Controllers
             db.SaveChanges();
 
             return RedirectToAction(nameof(Details), new { id = comment.ArticleId });
+        }
+
+        [HttpPost]
+        public IActionResult Approve(Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var article = db.Articles
+                .Include(a => a.Comments)
+                .ThenInclude(u => u.User)
+                .FirstOrDefault(a => a.Id == id);
+
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            if (article.Approved == false)
+            {
+                article.Approved = true;
+            }
+            else
+            {
+                article.Approved = false;
+            }
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

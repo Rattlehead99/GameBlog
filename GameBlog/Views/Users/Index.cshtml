@@ -19,47 +19,85 @@
         </div>
     </div>
 </div>
+ @*   @foreach (var article in Model.Articles)
+    {
+
+    <div class="col-lg-6 col-sm-12 left">
+    <div class="col-md-5">
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+    <div class="">
+    <h3 class="articleHeader d-inline-block mb-2 text-danger">@article.Title</h3>
+    </div>
+    <div class="col-auto d-lg-block">
+    <img src="@article.ImageUrl" class="img-thumbnail float-right">
+    </div>
+    <span class="flex-column">
+    <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="btn btn-primary">Read</a>
+    <a asp-controller="Articles" asp-action="Edit" asp-route-id="@article.Id" class="btn btn-secondary">Edit</a>
+    <a asp-controller="Articles" asp-action="Delete" asp-route-id="@article.Id" class="btn btn-danger">Delete</a>
+    </span>
+    </div>
+    </div>
+    </div>
+
+    }
+    </div>
+    <div class="column">
+    @foreach (var rating in Model.Ratings)
+    {
+
+    <div class="col-lg-6 col-sm-12 right">
+    <div class="col-md-5">
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+    <div class="">
+    <h3 class="d-inline-block mb-2 text-primary">@rating.Game.Name</h3>
+    </div>
+    <div class="col-auto d-lg-block">
+    <img src="@rating.Game.ImageUrl" class="img-thumbnail float-right">
+    </div>
+    <div class="card">
+    <a asp-controller="Games" asp-action="Details" asp-route-id="@rating.GameId" class="btn btn-primary">Details</a>
+    </div>
+    </div>
+    </div>
+    </div>
+    }
+    </div>*@
+
 
 <div class="row">
-    <div class="col-lg-6 col-sm-12 left">
+    <div class="column" style="background-color:#bbb">
         @foreach (var article in Model.Articles)
         {
 
-            <div class="col-md-5">
-                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                    <div class="">
-                        <h3 class="articleHeader d-inline-block mb-2 text-primary">@article.Title</h3>
-                    </div>
-                    <div class="col-auto d-none d-lg-block">
-                        <img src="@article.ImageUrl" class="img-thumbnail float-right">
-                    </div>
-                    <span class="flex-column">
-                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="btn btn-primary">Read</a>
-                        <a asp-controller="Articles" asp-action="Edit" asp-route-id="@article.Id" class="btn btn-secondary">Edit</a>
-                        <a asp-controller="Articles" asp-action="Delete" asp-route-id="@article.Id" class="btn btn-danger">Delete</a>
-                    </span>
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="">
+                    <h3 class="articleHeader d-inline-block mb-2 text-danger">@article.Title</h3>
                 </div>
+                <div class="col-auto d-lg-block">
+                    <img width="500" height="500" src="@article.ImageUrl" class="img-thumbnail float-right">
+                </div>
+                <span class="flex-column">
+                    <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="btn btn-primary">Read</a>
+                    <a asp-controller="Articles" asp-action="Edit" asp-route-id="@article.Id" class="btn btn-secondary">Edit</a>
+                    <a asp-controller="Articles" asp-action="Delete" asp-route-id="@article.Id" class="btn btn-danger">Delete</a>
+                </span>
             </div>
         }
     </div>
 
-    <div class="col-lg-6 col-sm-12 right">
+    <div class="column" style="background-color:#aaa">
         @foreach (var rating in Model.Ratings)
         {
-            <div class="col-md-5">
-                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                    <div class="">
-                        <h3 class="d-inline-block mb-2 text-primary">@rating.Game.Name</h3>
-                    </div>
-                    <div class="col-auto d-none d-lg-block">
-                        <img src="@rating.Game.ImageUrl" class="img-thumbnail float-right">
-                    </div>
-                    <div class="card">
-                        <a asp-controller="Games" asp-action="Details" asp-route-id="@rating.GameId" class="btn btn-primary">Details</a>
-                    </div>
-                </div>
+            <div class="">
+                <h3 class="d-inline-block mb-2 text-primary">@rating.Game.Name</h3>
+            </div>
+            <div class="col-auto d-lg-block">
+                <img width="500" height="500" src="@rating.Game.ImageUrl" class="img-thumbnail float-right">
+            </div>
+            <div class="card">
+                <a asp-controller="Games" asp-action="Details" asp-route-id="@rating.GameId" class="btn btn-primary">Details</a>
             </div>
         }
     </div>
-
 </div>
