@@ -41,7 +41,6 @@ namespace GameBlog.Controllers
 
             return View(new AllArticlesViewModel
             {
-                Search = "null",
                 Articles = articles
             });
         }

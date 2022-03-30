@@ -1,0 +1,44 @@
+﻿@model AllUsersViewModel
+
+<form method="post" asp-action="All" asp-controller="Users">
+    <div class="card single_post">
+        <div class="card">
+            <div class="body search">
+                <div class="input-group m-b-0">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    </div>
+                    <input type="text" name="searchText" class="form-control" placeholder="Search...">
+                    <input class="btn btn-info" type="submit" value="Search" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+    @foreach (var user in Model.Users)
+{
+    <div class="container d-flex justify-content-center align-items-center mb-2">
+        <div class="card">
+            @*<div class="upper"> <img src="https://i.imgur.com/Qtrsrk5.jpg" class="img-fluid"> </div>*@
+            @*<div class="user text-center">
+                <div class="profile"> <img src="https://i.imgur.com/JgYD2nQ.jpg" class="rounded-circle" width="80"> </div>
+                </div>*@
+            <div class="mt-5 text-center">
+                <h4 class="mb-0">@user.UserName</h4> <span class="text-muted d-block mb-2">Reputation Points: @user.Reputation</span> @*<button class="btn btn-primary btn-sm follow">Follow</button>*@
+                <div class="d-flex justify-content-between align-items-center mt-4 px-4">
+                    <div class="stats">
+                        <h6 class="mb-0">Articles</h6> <span>@user.Articles.Count</span>
+                    </div>
+                    <div class="stats">
+                        <h6 class="mb-0 ms-2">Games Rated</h6> <span>@user.Ratings.Count</span>
+                    </div>
+
+                    <div class="">
+                        <a asp-controller="Users" asp-action="Profile" asp-route-id="@user.Id" class="btn btn-primary">Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

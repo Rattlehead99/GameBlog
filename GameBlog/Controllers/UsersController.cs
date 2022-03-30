@@ -47,10 +47,37 @@ namespace GameBlog.Controllers
                 Id = user.Id,
                 Ratings = user.Ratings,
                 Reputation = user.Reputation,
-                UserName=user.UserName
+                UserName = user.UserName
             };
 
             return View(userViewModel);
+        }
+
+        public IActionResult All(string searchText)
+        {
+            var usersQuery = db.Users.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchText))
+            {
+                usersQuery = usersQuery
+                    .Where(uq => uq.UserName.Contains(searchText) || uq.Email.Contains(searchText));
+            }
+
+            var users = usersQuery.Select(u => new UserViewModel
+            {
+                UserName = u.UserName,
+                Articles = u.Articles,
+                Email = u.Email,
+                Id = u.Id,
+                Ratings = u.Ratings,
+                Reputation = u.Reputation
+            })
+             .ToList();
+
+            return View(new AllUsersViewModel
+            {
+                Users = users
+            }) ;
         }
     }
 }
