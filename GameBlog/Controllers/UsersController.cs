@@ -121,5 +121,33 @@ namespace GameBlog.Controllers
 
             return View(userViewModel);
         }
+
+        public async Task<IActionResult> Rate(Guid id)
+        {
+            var loggedUser = await userManager.GetUserAsync(User);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            
+            var user = db.Users.SingleOrDefault(x => x.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (!user.ReputationLikes.Contains(loggedUser.Id.ToString()))
+            {
+                user.Reputation++;
+                user.ReputationLikes.Add(loggedUser.Id.ToString());
+
+                db.Users.Update(user);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("All");
+        }
     }
 }
