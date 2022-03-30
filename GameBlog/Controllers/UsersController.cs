@@ -142,6 +142,7 @@ namespace GameBlog.Controllers
             {
                 user.Reputation++;
                 user.ReputationLikes.Add(loggedUser.Id.ToString());
+                db.SaveChanges();
 
                 db.Users.Update(user);
                 db.SaveChanges();
