@@ -1,46 +1,55 @@
 ﻿@model AllGamesViewModel
+@inject SignInManager<User> SignInManager;
+@inject UserManager<User> UserManager;
+@using static GameBlog.Data.DataConstants.Role
+
 @{
     ViewData["Title"] = "Games";
+
+    var user = await UserManager.GetUserAsync(User);
 }
-  <form method="post" asp-action="Index" asp-controller="Games">
-        <div class="card single_post">
-            <div class="card">
-                <div class="body search">
-                    <div class="input-group m-b-0">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
-                        </div>
-                        <input type="text" name="searchText" class="form-control" placeholder="Search...">
-                        <input class="btn btn-info" type="submit" value="Search"/>
+<p>@user</p>
+<form method="post" asp-action="Index" asp-controller="Games">
+    <div class="card single_post">
+        <div class="card">
+            <div class="body search">
+                <div class="input-group m-b-0">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
                     </div>
+                    <input type="text" name="searchText" class="form-control" placeholder="Search...">
+                    <input class="btn btn-info" type="submit" value="Search" />
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+</form>
 
-@if(!Model.Games.Any())
+@if (!Model.Games.Any())
 {
     <h1>No articles available right now</h1>
 }
 else
 {
-<div class="row mb-2">
-    @foreach(var game in Model.Games)
-    {
-     <div class="col-md-4 offset-2">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="">
-          <h3 class="d-inline-block mb-2 text-primary">@game.Name</h3>
-        </div>
-        <div class="col-auto d-lg-block">
-          <img src="@game.ImageUrl" class="img-thumbnail float-right">
-           <a asp-controller="Games" asp-action="Details" asp-route-id="@game.Id" class="btn btn-primary">Details</a>
-           <a asp-controller="Games" asp-action="Add" asp-route-id="@game.Id" class="btn btn-secondary">Add</a>
-           <a asp-controller="Games" asp-action="Edit" asp-route-id="@game.Id" class="btn btn-secondary">Edit</a>
-           <a asp-controller="Games" asp-action="Delete" asp-route-id="@game.Id" class="btn btn-secondary">Delete</a>
-        </div>
-      </div>
+    <div class="row mb-2">
+        @foreach (var game in Model.Games)
+        {
+            <div class="col-md-4 offset-2">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="">
+                        <h3 class="d-inline-block mb-2 text-primary">@game.Name</h3>
+                    </div>
+                    <div class="col-auto d-lg-block">
+                        <img src="@game.ImageUrl" class="img-thumbnail float-right">
+                        <a asp-controller="Games" asp-action="Details" asp-route-id="@game.Id" class="btn btn-primary">Details</a>
+                        @if (User.IsInRole(Administrator))
+                        {
+                            <a asp-controller="Games" asp-action="Edit" asp-route-id="@game.Id" class="btn btn-secondary">Edit</a>
+                            <a asp-controller="Games" asp-action="Delete" asp-route-id="@game.Id" class="btn btn-secondary">Delete</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-    }
-</div>
 }

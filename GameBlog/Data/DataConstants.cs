@@ -50,5 +50,9 @@
             public const int MaxRating = 10;
         }
 
+        public class Role
+        {
+            public const string Administrator = "Administrator";
+        }
     }
 }

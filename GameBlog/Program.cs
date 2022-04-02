@@ -1,9 +1,10 @@
 using GameBlog.Data;
 using GameBlog.Data.Models;
+using GameBlog.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<GameBlogDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<GameBlogDbContext>();
 //https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-6.0&tabs=visual-studio
 builder.Services.Configure<IdentityOptions>(options =>
@@ -41,6 +43,8 @@ builder.Services.AddControllersWithViews();
 
 WebApplication? app = builder.Build();
 
+SeedData.InitializeDatabase(app);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -60,6 +64,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapControllerRoute(
     name: "default",
