@@ -1,6 +1,7 @@
 ﻿using GameBlog.Data;
 using GameBlog.Data.Models;
 using GameBlog.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -17,10 +18,26 @@ namespace GameBlog.Controllers
             this.db = db;
         }
 
-        public IActionResult Index(string searchText)
+        [AllowAnonymous]
+        public IActionResult Index(int pageNumber = 1, string searchText ="")
         {
-            var articlesQuery = db.Articles.AsQueryable();
+            int pageSize = 6;
+            double pageCount = Math.Ceiling(db.Articles.Count()/ (double)pageSize);
 
+            if (pageNumber < 1)
+            {
+                return RedirectToAction("Index", new { pageNumber = 1 });
+            }
+            if (pageNumber > pageCount)
+            {
+                return RedirectToAction("Index", new {pageNumber = pageCount });
+            }
+
+            var articlesQuery = db.Articles
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsQueryable();
+          
             if (!String.IsNullOrEmpty(searchText))
             {
                 articlesQuery = articlesQuery
@@ -34,14 +51,15 @@ namespace GameBlog.Controllers
                 Title = a.Title,
                 ImageUrl = a.ImageUrl,
                 UserId = a.UserId,
-                Approved = a.Approved
+                Approved = a.Approved,
             })
             .ToList();
 
 
             return View(new AllArticlesViewModel
             {
-                Articles = articles
+                Articles = articles,
+                PageNumber = pageNumber
             });
         }
 

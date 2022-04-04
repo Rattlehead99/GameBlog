@@ -1,24 +1,26 @@
 ﻿@model AllArticlesViewModel
+@inject UserManager<User> UserManager
+@using static GameBlog.Data.DataConstants.Role
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-    <form method="post" asp-action="Index" asp-controller="Home">
-        <div class="card single_post">
-            <div class="card">
-                <div class="body search">
-                    <div class="input-group m-b-0">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
-                        </div>
-                        <input type="text" name="searchText" class="form-control" placeholder="Search...">
-                        <input class="btn btn-info" type="submit" value="Search"/>
+<form method="post" asp-action="Index" asp-controller="Home">
+    <div class="card single_post">
+        <div class="card">
+            <div class="body search">
+                <div class="input-group m-b-0">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
                     </div>
+                    <input type="text" name="searchText" class="form-control" placeholder="Search...">
+                    <input class="btn btn-info" type="submit" value="Search" />
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+</form>
 
 @if (!Model.Articles.Any())
 {
@@ -40,16 +42,23 @@ else
                             <img src="@article.ImageUrl" class="img-thumbnail float-right">
 
                             <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="btn btn-primary">Read</a>
-
-                            <form method="post" asp-action="Approve" asp-controller="Articles">
-                                <input asp-for="@article.Id" name="Id" hidden />
-                                <input class="btn btn-dark" type="submit" value="Disapprove" />
-                            </form>
+                            @if (User.IsInRole(Administrator))
+                            {
+                                <form method="post" asp-action="Approve" asp-controller="Articles">
+                                    <input asp-for="@article.Id" name="Id" hidden />
+                                    <input class="btn btn-dark" type="submit" value="Disapprove" />
+                                </form>
+                            }
                         </div>
                     </div>
                 </div>
             }
         }
+    </div>
+
+    <div>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Home" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous Page</a>
+        <a  class="btn btn-primary" asp-action="Index" asp-controller="Home" asp-route-pageNumber="@(Model.PageNumber + 1)">Next Page</a>
     </div>
 }
 

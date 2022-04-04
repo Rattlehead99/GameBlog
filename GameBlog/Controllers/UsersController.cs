@@ -1,6 +1,7 @@
 ﻿using GameBlog.Data;
 using GameBlog.Data.Models;
 using GameBlog.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace GameBlog.Controllers
         }
 
         //GET
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var user = await userManager.GetUserAsync(User);
@@ -53,6 +55,7 @@ namespace GameBlog.Controllers
             return View(userViewModel);
         }
 
+        [AllowAnonymous]
         public IActionResult All(string searchText)
         {
             var usersQuery = db.Users.AsQueryable();
@@ -80,6 +83,7 @@ namespace GameBlog.Controllers
             }) ;
         }
 
+        [AllowAnonymous]
         public IActionResult Profile(Guid id)
         {
             if (!ModelState.IsValid)
@@ -122,6 +126,7 @@ namespace GameBlog.Controllers
             return View(userViewModel);
         }
 
+        [Authorize]
         public async Task<IActionResult> Rate(Guid id)
         {
             var loggedUser = await userManager.GetUserAsync(User);

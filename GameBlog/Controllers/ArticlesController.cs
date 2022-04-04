@@ -1,13 +1,16 @@
-﻿using GameBlog.Data;
-using GameBlog.Data.Models;
-using GameBlog.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
+﻿
 
 namespace GameBlog.Controllers
 {
+    using GameBlog.Data;
+    using GameBlog.Data.Models;
+    using GameBlog.Models;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using System.Security.Claims;
+    using static GameBlog.Data.DataConstants.Role;
 
     public class ArticlesController : Controller
     {
@@ -20,6 +23,7 @@ namespace GameBlog.Controllers
             this.userManager = userManager;
         }
 
+        [Authorize]
         public IActionResult Index(string searchText)
         {
             var articlesQuery = db.Articles.OrderByDescending(a => a.PostDate).AsQueryable();
@@ -48,12 +52,14 @@ namespace GameBlog.Controllers
         }
 
         //GET
+        [Authorize]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(ArticleViewModel article)
         {
 
@@ -83,6 +89,7 @@ namespace GameBlog.Controllers
         }
 
         //GET
+        [Authorize]
         public IActionResult Edit(Guid id)
         {
             Article? article = db.Articles.SingleOrDefault(a => a.Id == id);
@@ -100,6 +107,7 @@ namespace GameBlog.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Edit(ArticleViewModel article)
         {
             if (!ModelState.IsValid)
@@ -127,6 +135,7 @@ namespace GameBlog.Controllers
         }
 
         //GET
+        [Authorize]
         public IActionResult Delete(Guid id)
         {
             Article? article = db.Articles.Find(id);
@@ -152,6 +161,7 @@ namespace GameBlog.Controllers
 
         [HttpPost]
         [ActionName("Delete")]
+        [Authorize]
         public IActionResult DeleteForm([FromForm]Guid id) 
         {
             if (!ModelState.IsValid)
@@ -173,6 +183,7 @@ namespace GameBlog.Controllers
         }
 
         //GET
+        [AllowAnonymous]
         public IActionResult Details(Guid id)
         {
             if (!ModelState.IsValid)
@@ -205,6 +216,7 @@ namespace GameBlog.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostComment(CommentViewModel comment)
         {
             
@@ -237,6 +249,7 @@ namespace GameBlog.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles=Administrator)]
         public IActionResult Approve(Guid id)
         {
             if (!ModelState.IsValid)

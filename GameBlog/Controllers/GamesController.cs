@@ -1,9 +1,11 @@
 ﻿using GameBlog.Data;
 using GameBlog.Data.Models;
 using GameBlog.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static GameBlog.Data.DataConstants.Role;
 
 namespace GameBlog.Controllers
 {
@@ -18,12 +20,12 @@ namespace GameBlog.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult Index(string searchText, int pageIndex)
+        [AllowAnonymous]
+        public IActionResult Index(string searchText, int pageNumber)
         {
             int pageSize = 6;
 
-
-            var games = db.Games.OrderBy(g => g.Name).Skip(pageIndex*pageSize).Take(pageSize).AsQueryable();
+            var games = db.Games.OrderBy(g => g.Name).Skip((pageNumber - 1)*pageSize).Take(pageSize).AsQueryable();
 
             if (!String.IsNullOrEmpty(searchText))
             {
@@ -52,12 +54,14 @@ namespace GameBlog.Controllers
         }
 
         //GET:
+        [Authorize(Roles = Administrator)]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = Administrator)]
         public IActionResult Create(GameViewModel game)
         {
             if (game == null)
@@ -88,6 +92,7 @@ namespace GameBlog.Controllers
         }
 
         //GET:
+        [Authorize(Roles = Administrator)]
         public IActionResult Edit(Guid id)
         {
             Game? game = db.Games.SingleOrDefault(x => x.Id == id);
@@ -106,6 +111,7 @@ namespace GameBlog.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Administrator)]
         public IActionResult Edit(GameViewModel game)
         {
             if (!ModelState.IsValid)
@@ -132,6 +138,8 @@ namespace GameBlog.Controllers
         }
            
         //GET:
+        [Authorize]
+        [Authorize(Roles = Administrator)]
         public IActionResult Delete(Guid? id)
         {
             var game = db.Games.Find(id);
@@ -156,6 +164,7 @@ namespace GameBlog.Controllers
 
         [HttpPost]
         [ActionName("Delete")]
+        [Authorize(Roles = Administrator)]
         public IActionResult DeleteForm(Guid? id)
         {
             if (!ModelState.IsValid)
@@ -177,6 +186,7 @@ namespace GameBlog.Controllers
         }
 
         //GET:
+        [AllowAnonymous]
         public IActionResult Details(Guid id)
         {
             if (!ModelState.IsValid)
@@ -207,6 +217,7 @@ namespace GameBlog.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> RateGame(RatingViewModel rating)
         {
             var user = await userManager.GetUserAsync(User);
