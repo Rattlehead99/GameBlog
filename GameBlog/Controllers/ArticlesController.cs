@@ -24,9 +24,24 @@ namespace GameBlog.Controllers
         }
 
         [Authorize]
-        public IActionResult Index(string searchText)
+        public IActionResult Index(int pageNumber=1, string searchText="")
         {
-            var articlesQuery = db.Articles.OrderByDescending(a => a.PostDate).AsQueryable();
+            int pageSize = 6;
+            double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
+
+            if (pageNumber < 1)
+            {
+                return RedirectToAction("Index", new { pageNumber = 1 });
+            }
+            if (pageNumber > pageCount)
+            {
+                return RedirectToAction("Index", new { pageNumber = pageCount });
+            }
+
+            var articlesQuery = db.Articles
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .OrderByDescending(a => a.PostDate).AsQueryable();
 
             if (!String.IsNullOrEmpty(searchText))
             {
@@ -63,7 +78,7 @@ namespace GameBlog.Controllers
         public async Task<IActionResult> Create(ArticleViewModel article)
         {
 
-            var user = await userManager.GetUserAsync(User);
+            User? user = await userManager.GetUserAsync(User);
 
 
             if (!ModelState.IsValid)
@@ -71,7 +86,7 @@ namespace GameBlog.Controllers
                 return View(article);
             }
 
-            var articleData = new Article
+            Article? articleData = new Article
             {
                 Id = article.Id,
                 Title = article.Title,
@@ -219,15 +234,15 @@ namespace GameBlog.Controllers
         [Authorize]
         public async Task<IActionResult> PostComment(CommentViewModel comment)
         {
-            
-            var user = await userManager.GetUserAsync(User);
+
+            User? user = await userManager.GetUserAsync(User);
 
             if (!ModelState.IsValid)
             {
                 return View(comment);  
             }
 
-            var articleData = db.Articles
+            bool articleData = db.Articles
                 .Any(a => a.Id == comment.ArticleId);
 
             if (!articleData)
@@ -235,8 +250,9 @@ namespace GameBlog.Controllers
                 return NotFound();
             }
 
-            var commentData = new Comment
+            Comment? commentData = new Comment
             {
+                Id = comment.ArticleId,
                 ArticleId = comment.ArticleId,
                 UserId = user.Id,
                 Content = comment.Content
@@ -245,7 +261,7 @@ namespace GameBlog.Controllers
             db.Comments.Add(commentData);
             db.SaveChanges();
 
-            return RedirectToAction(nameof(Details), new { id = comment.ArticleId });
+            return RedirectToAction(nameof(Details), new { id = commentData.ArticleId });
         }
 
         [HttpPost]

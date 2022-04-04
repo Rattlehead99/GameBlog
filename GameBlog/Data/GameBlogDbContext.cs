@@ -45,8 +45,15 @@ namespace GameBlog.Data
                 .WithMany(c => c.Comments)
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
-            User user;
+
+            modelBuilder.Entity<UserReputations>()
+                .HasKey(ur => new { ur.UserId, ur.LikedUserId });
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.UserReputations)
+                .WithOne(u => u.User)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
            /* modelBuilder.Entity<User>().HasData(
                 user = new User

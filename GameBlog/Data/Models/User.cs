@@ -13,7 +13,7 @@
         public int Reputation { get; set; }
 
         [NotMapped]
-        public ICollection<string> ReputationLikes { get; set; } = new List<string>();
+        public ICollection<UserReputations> UserReputations { get; set; } = new List<UserReputations>();
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 

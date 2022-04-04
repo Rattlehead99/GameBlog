@@ -24,8 +24,21 @@ namespace GameBlog.Controllers
         public IActionResult Index(string searchText, int pageNumber)
         {
             int pageSize = 6;
+            double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
 
-            var games = db.Games.OrderBy(g => g.Name).Skip((pageNumber - 1)*pageSize).Take(pageSize).AsQueryable();
+            if (pageNumber < 1)
+            {
+                return RedirectToAction("Index", new { pageNumber = 1 });
+            }
+            if (pageNumber > pageCount)
+            {
+                return RedirectToAction("Index", new { pageNumber = pageCount });
+            }
+
+            var games = db.Games.OrderBy(g => g.Name)
+                .Skip((pageNumber - 1)*pageSize)
+                .Take(pageSize)
+                .AsQueryable();
 
             if (!String.IsNullOrEmpty(searchText))
             {

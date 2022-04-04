@@ -1,6 +1,6 @@
 ﻿
 
-namespace GameBlog.Infrastructure
+namespace GameBlog.Services
 {
     using GameBlog.Data;
     using GameBlog.Data.Models;

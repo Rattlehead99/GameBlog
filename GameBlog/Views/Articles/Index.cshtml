@@ -59,4 +59,8 @@ else
             </div>
         }
     </div>
+    <div>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Home" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous Page</a>
+        <a  class="btn btn-primary" asp-action="Index" asp-controller="Home" asp-route-pageNumber="@(Model.PageNumber + 1)">Next Page</a>
+    </div>
 }

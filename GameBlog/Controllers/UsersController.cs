@@ -129,29 +129,38 @@ namespace GameBlog.Controllers
         [Authorize]
         public async Task<IActionResult> Rate(Guid id)
         {
-            var loggedUser = await userManager.GetUserAsync(User);
+            User? loggedUser = await userManager.GetUserAsync(User);
 
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            
-            var user = db.Users.SingleOrDefault(x => x.Id == id);
+
+            User? user = db.Users
+                .Include(ur => ur.UserReputations)
+                .SingleOrDefault(x => x.Id == id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            if (!user.ReputationLikes.Contains(loggedUser.Id.ToString()))
+            if (!user.UserReputations.Any(u => u.LikedUserId == loggedUser.Id))
             {
                 user.Reputation++;
-                user.ReputationLikes.Add(loggedUser.Id.ToString());
-                db.SaveChanges();
-
-                db.Users.Update(user);
+                user.UserReputations.Add(new UserReputations { UserId = user.Id, User = user, LikedUserId = loggedUser.Id, LikedUser = loggedUser });
                 db.SaveChanges();
             }
+
+            //if (!user.ReputationLikes.Contains(loggedUser.Id.ToString()))
+            //{
+            //    user.Reputation++;
+            //    user.ReputationLikes.Add(loggedUser.Id.ToString());
+            //    db.SaveChanges();
+
+            //    db.Users.Update(user);
+            //    db.SaveChanges();
+            //}
 
             return RedirectToAction("All");
         }

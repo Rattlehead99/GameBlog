@@ -33,7 +33,7 @@ namespace GameBlog.Controllers
                 return RedirectToAction("Index", new {pageNumber = pageCount });
             }
 
-            var articlesQuery = db.Articles
+            IQueryable<Article>? articlesQuery = db.Articles
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .AsQueryable();
@@ -44,7 +44,7 @@ namespace GameBlog.Controllers
                     .Where(s => s.Title.Contains(searchText) || s.Content.Contains(searchText));
             }
 
-            var articles = articlesQuery.Select(a => new ArticleViewModel
+            List<ArticleViewModel>? articles = articlesQuery.Select(a => new ArticleViewModel
             {
                 Id = a.Id,
                 Content = a.Content,

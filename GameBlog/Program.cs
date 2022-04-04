@@ -1,6 +1,6 @@
 using GameBlog.Data;
 using GameBlog.Data.Models;
-using GameBlog.Infrastructure;
+using GameBlog.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
