@@ -99,7 +99,7 @@ namespace GameBlog.Controllers
             });
         }
 
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult Profile(Guid id)
         {
             if (!ModelState.IsValid)

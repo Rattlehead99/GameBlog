@@ -104,6 +104,15 @@ namespace GameBlog.Services
             int pageSize = 6;
             double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
 
+            if (pageNumber < 1)
+            {
+                pageNumber++;
+            }
+            if (pageNumber > pageCount)
+            {
+                pageNumber--;
+            }
+
             var articlesQuery = db.Articles
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)

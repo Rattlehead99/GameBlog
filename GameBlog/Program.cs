@@ -13,6 +13,7 @@ builder.Services.AddDbContext<GameBlogDbContext>(options =>
     options.UseSqlServer("Server=.;Database=GameBlog;Integrated Security = true;"));
 
 builder.Services.AddScoped<IArticlesService, ArticlesService>();
+builder.Services.AddScoped<IGamesService, GamesService>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
