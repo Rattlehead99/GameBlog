@@ -27,25 +27,6 @@ namespace GameBlog.Controllers
 
         public IActionResult Index(string searchText)
         {
-            //var usersQuery = db.Users.AsQueryable();
-
-            //if (!String.IsNullOrEmpty(searchText))
-            //{
-            //    usersQuery = usersQuery
-            //        .Where(uq => uq.UserName.Contains(searchText) || uq.Email.Contains(searchText));
-            //}
-
-            //var users = usersQuery.Select(u => new UserViewModel
-            //{
-            //    UserName = u.UserName,
-            //    Articles = u.Articles,
-            //    Email = u.Email,
-            //    Id = u.Id,
-            //    Ratings = u.Ratings,
-            //    Reputation = u.Reputation
-            //})
-            // .ToList();
-
             var users = administrationService.AllUsers(searchText);
 
             return View(users);
@@ -55,38 +36,6 @@ namespace GameBlog.Controllers
         //GET:
         public IActionResult AdministeredUser(Guid id)
         {
-            //User? user = db.Users.SingleOrDefault(u => u.Id == id);
-
-            //if (user == null)
-            //{
-            //    return BadRequest();
-            //}
-
-            //List<Article> userArticles = db.Articles
-            //   .Where(a => a.UserId == user.Id)
-            //   .ToList();
-
-            //List<Guid> gameIds = db.Ratings
-            //    .Where(x => x.UserId == user.Id)
-            //    .Select(x => x.GameId)
-            //    .Distinct()
-            //    .ToList();
-
-            //List<Game> userGames = db.Games
-            //    .Include(r => r.Ratings)
-            //    .Where(g => gameIds.Contains(g.Id))
-            //    .ToList();
-
-            //UserViewModel userViewModel = new UserViewModel
-            //{
-            //    Email = user.Email,
-            //    Articles = userArticles,
-            //    Id = user.Id,
-            //    Ratings = user.Ratings,
-            //    Reputation = user.Reputation,
-            //    UserName = user.UserName
-            //};
-
             if (!ModelState.IsValid)
             {
                 return NotFound();
@@ -100,26 +49,6 @@ namespace GameBlog.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeUserRole(Guid id)
         {
-        
-            //User? user = db.Users.SingleOrDefault(u => u.Id == id);
-
-            //if (user == null)
-            //{
-            //    return NotFound(id);
-            //}
-
-            //IdentityUserRole<Guid>? userRoles = db.UserRoles.SingleOrDefault(ur => ur.UserId == user.Id);
-
-            //if (userRoles != null)
-            //{
-            //    await userManager.RemoveFromRoleAsync(user, Administrator);
-            //    return RedirectToAction("Index", "Administration");
-            //}
-
-            //await userManager.AddToRoleAsync(user, Administrator);
-
-            //db.SaveChanges();
-
             if (!ModelState.IsValid)
             {
                 return BadRequest();
