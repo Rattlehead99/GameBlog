@@ -27,7 +27,7 @@ namespace GameBlog.Controllers
         }
 
         [Authorize]
-        public IActionResult Index(int pageNumber=1, string searchText="")
+        public IActionResult Index(int pageNumber = 1, string searchText = "")
         {
 
             //int pageSize = 6;
@@ -80,28 +80,28 @@ namespace GameBlog.Controllers
         [Authorize]
         public async Task<IActionResult> Create(ArticleViewModel article)
         {
+            //User? user = await userManager.GetUserAsync(User);
 
-            User? user = await userManager.GetUserAsync(User);
+            //Article? articleData = new Article
+            //{
+            //    Id = article.Id,
+            //    Title = article.Title,
+            //    Content = article.Content,
+            //    Comments = article.Comments,
+            //    Approved = false,
+            //    ImageUrl = article.ImageUrl,
+            //    UserId = user.Id
+            //};
 
+            //db.Articles.Add(articleData);
+            //db.SaveChanges();
 
             if (!ModelState.IsValid)
             {
                 return View(article);
             }
 
-            Article? articleData = new Article
-            {
-                Id = article.Id,
-                Title = article.Title,
-                Content = article.Content,
-                Comments = article.Comments,
-                Approved = false,
-                ImageUrl = article.ImageUrl,
-                UserId = user.Id
-            };
-
-            db.Articles.Add(articleData);
-            db.SaveChanges();
+            await articlesService.CreateArticle(article);
 
             return RedirectToAction("Index", "Articles");
         }
@@ -110,17 +110,20 @@ namespace GameBlog.Controllers
         [Authorize]
         public IActionResult Edit(Guid id)
         {
-            Article? article = db.Articles.SingleOrDefault(a => a.Id == id);
-            
-            var articleView = new ArticleViewModel
-            {
-                Approved = article.Approved,
-                Comments = article.Comments,
-                Content = article.Content,
-                Id = id,
-                ImageUrl = article.ImageUrl,
-                Title = article.Title,
-            };
+            //Article? article = db.Articles.SingleOrDefault(a => a.Id == id);
+
+            //var articleView = new ArticleViewModel
+            //{
+            //    Approved = article.Approved,
+            //    Comments = article.Comments,
+            //    Content = article.Content,
+            //    Id = id,
+            //    ImageUrl = article.ImageUrl,
+            //    Title = article.Title,
+            //};
+
+            var articleView = articlesService.GetArticleById(id);
+
             return View(articleView);
         }
 
@@ -128,26 +131,28 @@ namespace GameBlog.Controllers
         [Authorize]
         public IActionResult Edit(ArticleViewModel article)
         {
+            //var articleData = db.Articles.Find(article.Id);
+
+            //if (articleData == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //articleData.Approved = article.Approved;
+            //articleData.Comments = article.Comments;
+            //articleData.Content = article.Content;
+            //articleData.ImageUrl = article.ImageUrl;
+            //articleData.Title = article.Title;
+
+            //db.Articles.Update(articleData);
+            //db.SaveChanges();
+
             if (!ModelState.IsValid)
             {
                 return View(article);
             }
 
-            var articleData = db.Articles.Find(article.Id);
-
-            if (articleData == null)
-            {
-                return NotFound();
-            }
-
-            articleData.Approved = article.Approved;
-            articleData.Comments = article.Comments;
-            articleData.Content = article.Content;
-            articleData.ImageUrl = article.ImageUrl;
-            articleData.Title = article.Title;
-
-            db.Articles.Update(articleData);
-            db.SaveChanges();
+            articlesService.EditArticle(article);
 
             return RedirectToAction("Index", "Articles");
         }
@@ -156,23 +161,25 @@ namespace GameBlog.Controllers
         [Authorize]
         public IActionResult Delete(Guid id)
         {
-            Article? article = db.Articles.Find(id);
+            //Article? article = db.Articles.Find(id);
 
-            if (article == null)
-            {
-                return NotFound();
-            }
+            //if (article == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var articleView = new ArticleViewModel
-            {
-                Approved=article.Approved,
-                Comments=article.Comments,
-                Content=article.Content,
-                Id=id,
-                ImageUrl = article.ImageUrl,
-                Title=article.Title,
-                UserId=id
-            };
+            //var articleView = new ArticleViewModel
+            //{
+            //    Approved = article.Approved,
+            //    Comments = article.Comments,
+            //    Content = article.Content,
+            //    Id = id,
+            //    ImageUrl = article.ImageUrl,
+            //    Title = article.Title,
+            //    UserId = id
+            //};
+
+            var articleView = articlesService.GetArticleById(id);
 
             return View(articleView);
         }
@@ -180,22 +187,24 @@ namespace GameBlog.Controllers
         [HttpPost]
         [ActionName("Delete")]
         [Authorize]
-        public IActionResult DeleteForm([FromForm]Guid id) 
+        public IActionResult DeleteForm([FromForm] Guid id)
         {
+            //var articleData = db.Articles.Find(id);
+
+            //if (articleData == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //db.Articles.Remove(articleData);
+            //db.SaveChanges();
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var articleData = db.Articles.Find(id);
-
-            if (articleData == null)
-            {
-                return NotFound();
-            }
-
-            db.Articles.Remove(articleData);
-            db.SaveChanges();
+            articlesService.DeleteArticle(id);
 
             return RedirectToAction("Index", "Articles");
         }
@@ -204,31 +213,33 @@ namespace GameBlog.Controllers
         [AllowAnonymous]
         public IActionResult Details(Guid id)
         {
+            //var article = db.Articles
+            //    .Include(a => a.Comments)
+            //    .ThenInclude(u => u.User)
+            //    .FirstOrDefault(a => a.Id == id);
+
+            //if (article == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var articleView = new ArticleViewModel
+            //{
+            //    Approved = article.Approved,
+            //    Comments = article.Comments.OrderByDescending(c => c.PostDate).ToList(),
+            //    Content = article.Content,
+            //    Id = id,
+            //    ImageUrl = article.ImageUrl,
+            //    Title = article.Title,
+            //    UserId = id
+            //};
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var article = db.Articles
-                .Include(a => a.Comments)
-                .ThenInclude(u => u.User)
-                .FirstOrDefault(a => a.Id ==  id);
-
-            if (article == null)
-            {
-                return NotFound();
-            }
-
-            var articleView = new ArticleViewModel
-            {
-                Approved = article.Approved,
-                Comments = article.Comments.OrderByDescending(c=> c.PostDate).ToList(),
-                Content = article.Content,
-                Id = id,
-                ImageUrl = article.ImageUrl,
-                Title = article.Title,
-                UserId = id
-            };
+            var articleView = articlesService.Details(id);
 
             return View(articleView);
         }
@@ -238,63 +249,67 @@ namespace GameBlog.Controllers
         public async Task<IActionResult> PostComment(CommentViewModel comment)
         {
 
-            User? user = await userManager.GetUserAsync(User);
+            //User? user = await userManager.GetUserAsync(User);
+
+            //bool articleData = db.Articles
+            //    .Any(a => a.Id == comment.ArticleId);
+
+            //if (!articleData)
+            //{
+            //    return NotFound();
+            //}
+
+            //Comment? commentData = new Comment
+            //{
+            //    Id = comment.ArticleId,
+            //    ArticleId = comment.ArticleId,
+            //    UserId = user.Id,
+            //    Content = comment.Content
+            //};
+
+            //db.Comments.Add(commentData);
+            //db.SaveChanges();
 
             if (!ModelState.IsValid)
             {
-                return View(comment);  
+                return View(comment);
             }
 
-            bool articleData = db.Articles
-                .Any(a => a.Id == comment.ArticleId);
-
-            if (!articleData)
-            {
-                return NotFound();
-            }
-
-            Comment? commentData = new Comment
-            {
-                Id = comment.ArticleId,
-                ArticleId = comment.ArticleId,
-                UserId = user.Id,
-                Content = comment.Content
-            };
-
-            db.Comments.Add(commentData);
-            db.SaveChanges();
+            var commentData = await articlesService.PostComment(comment);
 
             return RedirectToAction(nameof(Details), new { id = commentData.ArticleId });
         }
 
         [HttpPost]
-        [Authorize(Roles=Administrator)]
+        [Authorize(Roles = Administrator)]
         public IActionResult Approve(Guid id)
         {
+            //var article = db.Articles
+            //    .Include(a => a.Comments)
+            //    .ThenInclude(u => u.User)
+            //    .FirstOrDefault(a => a.Id == id);
+
+            //if (article == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //if (article.Approved == false)
+            //{
+            //    article.Approved = true;
+            //}
+            //else
+            //{
+            //    article.Approved = false;
+            //}
+            //db.SaveChanges();
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var article = db.Articles
-                .Include(a => a.Comments)
-                .ThenInclude(u => u.User)
-                .FirstOrDefault(a => a.Id == id);
-
-            if (article == null)
-            {
-                return NotFound();
-            }
-
-            if (article.Approved == false)
-            {
-                article.Approved = true;
-            }
-            else
-            {
-                article.Approved = false;
-            }
-            db.SaveChanges();
+            articlesService.Approve(id);
 
             return RedirectToAction("Index", "Home");
         }

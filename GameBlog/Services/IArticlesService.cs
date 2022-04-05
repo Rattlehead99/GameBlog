@@ -8,17 +8,17 @@
     {
         public AllArticlesViewModel GetAllArticles(int pageNumber, string searchText);
 
-        public Article? CreateArticle(ArticleViewModel article);
+        public Task CreateArticle(ArticleViewModel article);
 
         public ArticleViewModel GetArticleById(Guid id);
 
-        public ArticleViewModel EditArticle(ArticleViewModel article);
+        public void EditArticle(ArticleViewModel article);
 
-        public Article DeleteArticle([FromForm]Guid id);
+        public void DeleteArticle([FromForm]Guid id);
 
         public ArticleViewModel Details(Guid id);
 
-        public void PostComment(CommentViewModel comment);
+        public Task<Comment> PostComment(CommentViewModel comment);
 
         public void Approve(Guid id);
 
