@@ -21,7 +21,7 @@ namespace GameBlog.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Index(string searchText, int pageNumber)
+        public IActionResult Index(int pageNumber, string searchText)
         {
             int pageSize = 6;
             double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
@@ -59,8 +59,8 @@ namespace GameBlog.Controllers
 
             var allGames = new AllGamesViewModel
             {
-                Search = "null",
-                Games = gamesData
+                Games = gamesData,
+                PageNumber = pageNumber
             };
 
             return View(allGames);

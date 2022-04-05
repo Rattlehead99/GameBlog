@@ -56,9 +56,24 @@ namespace GameBlog.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult All(string searchText)
+        public IActionResult All(int pageNumber, string searchText)
         {
-            var usersQuery = db.Users.AsQueryable();
+            int pageSize = 6;
+            double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
+
+            if (pageNumber < 1)
+            {
+                return RedirectToAction("Index", new { pageNumber = 1 });
+            }
+            if (pageNumber > pageCount)
+            {
+                return RedirectToAction("Index", new { pageNumber = pageCount });
+            }
+
+            var usersQuery = db.Users
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsQueryable();
 
             if (!String.IsNullOrEmpty(searchText))
             {
@@ -79,8 +94,9 @@ namespace GameBlog.Controllers
 
             return View(new AllUsersViewModel
             {
-                Users = users
-            }) ;
+                Users = users,
+                PageNumber = pageNumber
+            });
         }
 
         [AllowAnonymous]

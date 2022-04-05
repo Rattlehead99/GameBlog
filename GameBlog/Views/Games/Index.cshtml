@@ -8,7 +8,6 @@
 
     var user = await UserManager.GetUserAsync(User);
 }
-<p>@user</p>
 <form method="post" asp-action="Index" asp-controller="Games">
     <div class="card single_post">
         <div class="card">
@@ -53,7 +52,7 @@ else
         }
     </div>
     <div>
-        <a class="btn btn-primary" asp-action="Index" asp-controller="Home" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous Page</a>
-        <a  class="btn btn-primary" asp-action="Index" asp-controller="Home" asp-route-pageNumber="@(Model.PageNumber + 1)">Next Page</a>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Games" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous Page</a>
+        <a  class="btn btn-primary" asp-action="Index" asp-controller="Games" asp-route-pageNumber="@(Model.PageNumber + 1)">Next Page</a>
     </div>
 }

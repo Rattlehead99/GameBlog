@@ -18,5 +18,9 @@
 
         public ArticleViewModel Details(Guid id);
 
+        public void PostComment(CommentViewModel comment);
+
+        public void Approve(Guid id);
+
     }
 }

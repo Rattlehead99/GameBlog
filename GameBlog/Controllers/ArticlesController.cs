@@ -5,6 +5,7 @@ namespace GameBlog.Controllers
     using GameBlog.Data;
     using GameBlog.Data.Models;
     using GameBlog.Models;
+    using GameBlog.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -16,54 +17,56 @@ namespace GameBlog.Controllers
     {
         private readonly GameBlogDbContext db;
         private readonly UserManager<User> userManager;
+        private readonly IArticlesService articlesService;
 
-        public ArticlesController(GameBlogDbContext db, UserManager<User> userManager)
+        public ArticlesController(GameBlogDbContext db, UserManager<User> userManager, IArticlesService articlesService)
         {
             this.db = db;
             this.userManager = userManager;
+            this.articlesService = articlesService;
         }
 
         [Authorize]
         public IActionResult Index(int pageNumber=1, string searchText="")
         {
-            int pageSize = 6;
-            double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
 
-            if (pageNumber < 1)
-            {
-                return RedirectToAction("Index", new { pageNumber = 1 });
-            }
-            if (pageNumber > pageCount)
-            {
-                return RedirectToAction("Index", new { pageNumber = pageCount });
-            }
+            //int pageSize = 6;
+            //double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
 
-            var articlesQuery = db.Articles
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .OrderByDescending(a => a.PostDate).AsQueryable();
+            //if (pageNumber < 1)
+            //{
+            //    return RedirectToAction("Index", new { pageNumber = 1 });
+            //}
+            //if (pageNumber > pageCount)
+            //{
+            //    return RedirectToAction("Index", new { pageNumber = pageCount });
+            //}
 
-            if (!String.IsNullOrEmpty(searchText))
-            {
-                articlesQuery = articlesQuery
-                    .Where(s => s.Title.Contains(searchText) || s.Content.Contains(searchText));
-            }
+            //var articlesQuery = db.Articles
+            //    .Skip((pageNumber - 1) * pageSize)
+            //    .Take(pageSize)
+            //    .OrderByDescending(a => a.PostDate).AsQueryable();
 
-            var articles = articlesQuery.Select(a => new ArticleViewModel
-            {
-                Id = a.Id,
-                Content = a.Content,
-                Title = a.Title,
-                ImageUrl = a.ImageUrl,
-                UserId = a.UserId,
-                Approved = a.Approved
-            })
-            .ToList();
+            //if (!String.IsNullOrEmpty(searchText))
+            //{
+            //    articlesQuery = articlesQuery
+            //        .Where(s => s.Title.Contains(searchText) || s.Content.Contains(searchText));
+            //}
 
-            return View(new AllArticlesViewModel
-            {
-                Articles = articles
-            });
+            //var articles = articlesQuery.Select(a => new ArticleViewModel
+            //{
+            //    Id = a.Id,
+            //    Content = a.Content,
+            //    Title = a.Title,
+            //    ImageUrl = a.ImageUrl,
+            //    UserId = a.UserId,
+            //    Approved = a.Approved
+            //})
+            //.ToList();
+
+            var articles = articlesService.GetAllArticles(pageNumber, searchText);
+
+            return View(articles);
         }
 
         //GET
