@@ -44,13 +44,7 @@ namespace GameBlog.Test.Services
         public ArticlesServiceTest(CustomWebApplicationFactory factory)
         {
             scope = factory.InitDb();
-            articleService = ResolveService<IArticlesService>(); 
-        }
-
-        private T ResolveService<T>()
-            where T : notnull
-        {
-            return scope.ResolveService<T>();
+            articleService = scope.ResolveService<IArticlesService>(); 
         }
 
         [Fact]
@@ -215,11 +209,11 @@ namespace GameBlog.Test.Services
         [Fact]
         public async Task Create_Should_Add_Article_To_DB()
         {
-            var articleService = this.ResolveService<IArticlesService>();
+            var articleService = scope.ResolveService<IArticlesService>();
 
             await articleService.CreateArticle(TestData.ArticleView);
 
-            var articles = ResolveService<GameBlogDbContext>().Articles;
+            var articles = scope.ResolveService<GameBlogDbContext>().Articles;
             var articleCount = articles.Count();
 
             Assert.Equal("Some dumb title123123", articles.OrderByDescending(x=>x.PostDate).First().Title);
@@ -232,7 +226,7 @@ namespace GameBlog.Test.Services
             await articleService.CreateArticle(TestData.ArticleView);
             await articleService.CreateArticle(TestData.ArticleView);
 
-            var articles = ResolveService<GameBlogDbContext>().Articles;
+            var articles = scope.ResolveService<GameBlogDbContext>().Articles;
             var articleCount = articles.Count();
 
             Assert.Equal("Some dumb title123123", articles.OrderByDescending(x => x.PostDate).First().Title);
@@ -246,7 +240,7 @@ namespace GameBlog.Test.Services
             var articleView = TestData.ArticleView;
           
             //Act
-            var articles = ResolveService<GameBlogDbContext>().Articles;
+            var articles = scope.ResolveService<GameBlogDbContext>().Articles;
             Action? action = () => articleService.EditArticle(articleView);
 
             //Assert
@@ -261,7 +255,7 @@ namespace GameBlog.Test.Services
             var articleView = TestData.ArticleView;
 
             //Act
-            var articles = ResolveService<GameBlogDbContext>().Articles;
+            var articles = scope.ResolveService<GameBlogDbContext>().Articles;
             Action? action = () => articleService.DeleteArticle(articleView.Id);
 
             //Assert
@@ -275,7 +269,7 @@ namespace GameBlog.Test.Services
             var articleView = TestData.ArticleView;
             
             //Act
-            var articles = ResolveService<GameBlogDbContext>().Articles;
+            var articles = scope.ResolveService<GameBlogDbContext>().Articles;
             articleService.CreateArticle(articleView);
             var initialArticlesCount = articles.Count();
 
@@ -293,7 +287,7 @@ namespace GameBlog.Test.Services
             var articleView = TestData.ArticleView;
 
             //Act
-            var articles = ResolveService<GameBlogDbContext>().Articles;
+            var articles = scope.ResolveService<GameBlogDbContext>().Articles;
             var action = () => articleService.Approve(articleView.Id);
 
             //Assert
@@ -304,7 +298,7 @@ namespace GameBlog.Test.Services
         public void Approve_Should_Change_Article_Property()
         {
             //Arrange
-            var articles = ResolveService<GameBlogDbContext>().Articles;
+            var articles = scope.ResolveService<GameBlogDbContext>().Articles;
 
             var articleView = TestData.ArticleViewWithId;
             articleService.CreateArticle(articleView);
@@ -323,7 +317,7 @@ namespace GameBlog.Test.Services
         public void PostComment_Should_Throw_When_ArticleData_Does_Not_Exist()
         {
             //Arrange
-            var articleService = this.ResolveService<IArticlesService>();
+            var articleService = scope.ResolveService<IArticlesService>();
             var articleView = TestData.ArticleView;
 
             CommentViewModel commentView = new CommentViewModel
@@ -344,8 +338,8 @@ namespace GameBlog.Test.Services
         public void EditArticle_Should_Change_Article_Data()
         {
             //Arrange
-            var articleService = this.ResolveService<IArticlesService>();
-            var articles = ResolveService<GameBlogDbContext>().Articles;
+            var articleService = scope.ResolveService<IArticlesService>();
+            var articles = scope.ResolveService<GameBlogDbContext>().Articles;
 
             var articleView = TestData.ArticleViewWithId;
             articleService.CreateArticle(articleView);
