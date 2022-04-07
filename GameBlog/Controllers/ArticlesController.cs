@@ -29,41 +29,6 @@ namespace GameBlog.Controllers
         [Authorize]
         public IActionResult Index(int pageNumber = 1, string searchText = "")
         {
-
-            //int pageSize = 6;
-            //double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
-
-            //if (pageNumber < 1)
-            //{
-            //    return RedirectToAction("Index", new { pageNumber = 1 });
-            //}
-            //if (pageNumber > pageCount)
-            //{
-            //    return RedirectToAction("Index", new { pageNumber = pageCount });
-            //}
-
-            //var articlesQuery = db.Articles
-            //    .Skip((pageNumber - 1) * pageSize)
-            //    .Take(pageSize)
-            //    .OrderByDescending(a => a.PostDate).AsQueryable();
-
-            //if (!String.IsNullOrEmpty(searchText))
-            //{
-            //    articlesQuery = articlesQuery
-            //        .Where(s => s.Title.Contains(searchText) || s.Content.Contains(searchText));
-            //}
-
-            //var articles = articlesQuery.Select(a => new ArticleViewModel
-            //{
-            //    Id = a.Id,
-            //    Content = a.Content,
-            //    Title = a.Title,
-            //    ImageUrl = a.ImageUrl,
-            //    UserId = a.UserId,
-            //    Approved = a.Approved
-            //})
-            //.ToList();
-
             var articles = articlesService.GetAllArticles(pageNumber, searchText);
 
             return View(articles);
@@ -79,23 +44,7 @@ namespace GameBlog.Controllers
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Create(ArticleViewModel article)
-        {
-            //User? user = await userManager.GetUserAsync(User);
-
-            //Article? articleData = new Article
-            //{
-            //    Id = article.Id,
-            //    Title = article.Title,
-            //    Content = article.Content,
-            //    Comments = article.Comments,
-            //    Approved = false,
-            //    ImageUrl = article.ImageUrl,
-            //    UserId = user.Id
-            //};
-
-            //db.Articles.Add(articleData);
-            //db.SaveChanges();
-
+        {   
             if (!ModelState.IsValid)
             {
                 return View(article);
@@ -110,18 +59,6 @@ namespace GameBlog.Controllers
         [Authorize]
         public IActionResult Edit(Guid id)
         {
-            //Article? article = db.Articles.SingleOrDefault(a => a.Id == id);
-
-            //var articleView = new ArticleViewModel
-            //{
-            //    Approved = article.Approved,
-            //    Comments = article.Comments,
-            //    Content = article.Content,
-            //    Id = id,
-            //    ImageUrl = article.ImageUrl,
-            //    Title = article.Title,
-            //};
-
             var articleView = articlesService.GetArticleById(id);
 
             return View(articleView);
@@ -155,6 +92,7 @@ namespace GameBlog.Controllers
         [Authorize]
         public IActionResult DeleteForm([FromForm] Guid id)
         {
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();

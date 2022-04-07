@@ -10,14 +10,10 @@ namespace GameBlog.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly GameBlogDbContext db;
         private readonly IArticlesService articlesService;
 
-        public HomeController(ILogger<HomeController> logger, GameBlogDbContext db, IArticlesService articlesService)
+        public HomeController(IArticlesService articlesService)
         {
-            _logger = logger;
-            this.db = db;
             this.articlesService = articlesService;
         }
 

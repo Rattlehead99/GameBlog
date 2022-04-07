@@ -12,14 +12,10 @@ namespace GameBlog.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly GameBlogDbContext db;
-        private readonly UserManager<User> userManager;
         private readonly IUsersService usersService;
 
-        public UsersController(GameBlogDbContext db, UserManager<User> userManager, IUsersService usersService)
+        public UsersController(IUsersService usersService)
         {
-            this.db = db;
-            this.userManager = userManager;
             this.usersService = usersService;
         }
 

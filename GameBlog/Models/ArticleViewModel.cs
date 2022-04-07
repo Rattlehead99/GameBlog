@@ -14,11 +14,11 @@ namespace GameBlog.Models
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
-        [StringLength(TitleMaxLength, MinimumLength = TitleMinLength, ErrorMessage ="{0} must be betwee {2} and {1} characters.")]
+        [StringLength(TitleMaxLength, MinimumLength = TitleMinLength, ErrorMessage ="{0} must be between {2} and {1} characters.")]
         public string Title { get; set; }
 
         [Required]
-        [StringLength(ContentMaxLength, MinimumLength = ContentMinLength, ErrorMessage ="The {0} of the Article must be betweeen {2} and {1} characters.")]
+        [StringLength(ContentMaxLength, MinimumLength = ContentMinLength, ErrorMessage ="The {0} of the Article must be between {2} and {1} characters.")]
         public string Content { get; set; }
 
         [Required]

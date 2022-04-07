@@ -174,7 +174,7 @@ namespace GameBlog.Services
             
             if (article == null)
             {
-                throw new ArgumentException("Article can not be found");
+                throw new ArgumentNullException("Article can not be found");
             }
 
             var articleView = new ArticleViewModel
@@ -204,8 +204,8 @@ namespace GameBlog.Services
 
             Comment? commentData = new Comment
             {
-                Id = comment.ArticleId,
-                ArticleId = comment.ArticleId,
+                Id = Guid.NewGuid(),
+                ArticleId =comment.ArticleId,
                 UserId = user.Id,
                 Content = comment.Content
             };

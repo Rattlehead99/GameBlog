@@ -12,16 +12,10 @@ namespace GameBlog.Controllers
 
     public class AdministrationController : Controller
     {
-        private readonly GameBlogDbContext db;
-        private readonly UserManager<User> userManager;
-        private readonly RoleManager<IdentityRole<Guid>> roleManager;
         private readonly IAdministrationService administrationService;
 
-        public AdministrationController(GameBlogDbContext db, UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager, IAdministrationService administrationService)
+        public AdministrationController(IAdministrationService administrationService)
         {
-            this.db = db;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
             this.administrationService = administrationService;
         }
 
