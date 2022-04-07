@@ -46,14 +46,18 @@ namespace GameBlog.Test.Mock
         }
 
         public static async Task<IServiceProvider> AddTestData(this IServiceProvider serviceProvider)
-        {  
-            
+        {
+
             using (var scope = serviceProvider.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<GameBlogDbContext>();
                 var userManager = scopedServices.GetRequiredService<UserManager<User>>();
 
+                //https://github.com/dotnet/efcore/issues/6282#issuecomment-509684621
+                db.ChangeTracker.Clear();
+
+                db.Database.EnsureDeleted();
                 db.Database.EnsureCreated();
 
                 await userManager.CreateAsync(new User

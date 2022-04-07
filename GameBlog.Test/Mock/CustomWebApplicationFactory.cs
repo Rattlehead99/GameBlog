@@ -51,7 +51,6 @@ namespace GameBlog.Test.Mock
         {
             var scope = Services.CreateAsyncScope();
             db = ResolveService<GameBlogDbContext>();
-            db.Database.EnsureDeleted();
             Services.AddTestData().GetAwaiter().GetResult();
             return new (scope, db);
         }
@@ -66,10 +65,12 @@ namespace GameBlog.Test.Mock
 
                 svc.AddAuthentication("Test")
                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", x => { });
-
+                
+                Guid id = Guid.NewGuid();
+                
                 svc.AddDbContext<GameBlogDbContext>(options =>
                 {
-                    options.UseInMemoryDatabase("MemoryDataBase");
+                    options.UseInMemoryDatabase("MemoryDataBase" + id);
                 });
 
                 svc.AddTestHttpContextAccessor();
