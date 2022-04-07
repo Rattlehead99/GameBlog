@@ -38,18 +38,18 @@ namespace GameBlog.Test.Mock
     {
         private GameBlogDbContext db;
         private ArticlesService articleService;
-        private readonly  CustomWebApplicationFactory factory;
+        private readonly CustomWebApplicationFactory factory;
         private readonly AsyncServiceScope scope;
 
         public ServiceProvisioner(CustomWebApplicationFactory factor)
         {
             this.factory = factor;
             scope = factory.Services.CreateAsyncScope();
+            //CreateService();
         }
         //public static void CreateService()
         //{
         //    //Arrange
-        //    db = DataBaseMock.Instance;
 
         //    Mock<IUserStore<User>> userStoreMock = new Mock<IUserStore<User>>();
         //    IUserStore<User>? userStore = userStoreMock.Object;

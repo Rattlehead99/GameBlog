@@ -16,17 +16,15 @@ public class Program
         builder.Services.AddDbContext<GameBlogDbContext>(options =>
             options.UseSqlServer("Server=.;Database=GameBlog;Integrated Security = true;"));
 
-        builder.Services.AddScoped<IArticlesService, ArticlesService>();
-        builder.Services.AddScoped<IGamesService, GamesService>();
-        builder.Services.AddScoped<IUsersService, UsersService>();
-        builder.Services.AddScoped<IAdministrationService, AdministrationService>();
-
-        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-        builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+        builder.Services.AddScoped<IArticlesService, ArticlesService>()
+        .AddScoped<IGamesService, GamesService>()
+        .AddScoped<IUsersService, UsersService>()
+        .AddScoped<IAdministrationService, AdministrationService>()
+        .AddDatabaseDeveloperPageExceptionFilter()
+        .AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddRoles<IdentityRole<Guid>>()
             .AddEntityFrameworkStores<GameBlogDbContext>();
-        //https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-6.0&tabs=visual-studio
+
         builder.Services.Configure<IdentityOptions>(options =>
         {
             // Password settings.

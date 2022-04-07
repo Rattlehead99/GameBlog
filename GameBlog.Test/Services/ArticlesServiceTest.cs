@@ -34,93 +34,34 @@ namespace GameBlog.Test.Services
     using Microsoft.EntityFrameworkCore;
     using System.Text.Json;
     using System.Net.Http;
+    using GameBlog.Test.TestConstants;
 
     public class ArticlesServiceTest : IClassFixture<CustomWebApplicationFactory>
     {
-        private GameBlogDbContext db;
-        private ArticlesService articleService;
-        private readonly CustomWebApplicationFactory factory;
-        private readonly AsyncServiceScope scope;
+        private IArticlesService articleService;
+        private readonly DependencyScope scope;
 
         public ArticlesServiceTest(CustomWebApplicationFactory factory)
         {
-            this.CreateService();
-            this.factory = factory;
-            scope = factory.Services.CreateAsyncScope();
+            scope = factory.InitDb();
+            articleService = ResolveService<IArticlesService>(); 
         }
 
         private T ResolveService<T>()
             where T : notnull
         {
-            return scope.ServiceProvider.GetRequiredService<T>();
-        }
-
-        private void CreateService()
-        {
-            //Arrange
-            db = DataBaseMock.Instance;
-
-            Mock<IUserStore<User>> userStoreMock = new Mock<IUserStore<User>>();
-            IUserStore<User>? userStore = userStoreMock.Object;
-
-            User testUser = new User
-            {
-                Id = CustomWebApplicationFactory.UserId,
-                UserName = "smth@gmail.com",
-                Email = "smth@gmail.com",
-                NormalizedUserName = "SMTH@GMAIL.COM".Normalize().ToUpperInvariant()
-            };
-
-            userStoreMock.Setup(x => x.FindByIdAsync(testUser.Id.ToString(), It.IsAny<CancellationToken>())).ReturnsAsync(testUser);
-
-            UserManager<User> userManager = new UserManager<User>(userStore, null, null, null, null, null, null, null, null);
-
-            var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-            var claimsPrincipal = new ClaimsPrincipal(
-                new ClaimsIdentity(
-                    new Claim[] { new Claim(ClaimTypes.NameIdentifier, testUser.Id.ToString()) }
-                    )
-                );
-
-            mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(claimsPrincipal);
-
-            Assert.Equal(testUser.Id.ToString(), mockHttpContextAccessor.Object.HttpContext.User.Claims.FirstOrDefault().Value);
-
-            db.Articles.Add(new Article
-            {
-                Id = Guid.NewGuid(),
-                UserId = Guid.Parse("{768CCB3A-C7AC-4141-BC00-5348116856E4}"),
-                Content = "Bulshiser that should reach 30 symbols at the very least",
-                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-                Title = "Some dumb title"
-            });
-
-            db.Users.Add(new User
-            {
-                Id = CustomWebApplicationFactory.UserId
-            });
-            db.SaveChanges();
-
-            articleService = new ArticlesService(db, userManager, mockHttpContextAccessor.Object);
+            return scope.ResolveService<T>();
         }
 
         [Fact]
         public async Task CreateArticle_Should_Add_An_Article_In_DB()
         {
-            this.CreateService();
 
-            ArticleViewModel articleView = new ArticleViewModel
-            {
-                Id = Guid.NewGuid(),
-                UserId = Guid.Parse("{A96852DC-4582-40FC-975A-7F4FA241357F}"),
-                Content = "that should reach 30 symbols at the very least I think it should be so",
-                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-                Title = "Some dumb title"
-            };
+            ArticleViewModel articleView = TestData.ArticleView;
 
             //Act
             await articleService.CreateArticle(articleView);
-            var articlesCountAfterCreation = db.Articles.Count();
+            var articlesCountAfterCreation = scope.Db.Articles.Count();
 
             //Assert
             Assert.Equal(2, articlesCountAfterCreation);
@@ -276,13 +217,7 @@ namespace GameBlog.Test.Services
         {
             var articleService = this.ResolveService<IArticlesService>();
 
-            await articleService.CreateArticle(new ArticleViewModel()
-            {
-                Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
-                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-                Title = "Some dumb title123123",
-                Approved = false
-            });
+            await articleService.CreateArticle(TestData.ArticleView);
 
             var articles = ResolveService<GameBlogDbContext>().Articles;
             var articleCount = articles.Count();
@@ -292,17 +227,23 @@ namespace GameBlog.Test.Services
         }
 
         [Fact]
-        public async void EditArticle_Should_Throw_When_Article_Not_Found()
+        public async Task Create_Twice_Should_Add_Article_To_DB()
+        {
+            await articleService.CreateArticle(TestData.ArticleView);
+            await articleService.CreateArticle(TestData.ArticleView);
+
+            var articles = ResolveService<GameBlogDbContext>().Articles;
+            var articleCount = articles.Count();
+
+            Assert.Equal("Some dumb title123123", articles.OrderByDescending(x => x.PostDate).First().Title);
+            Assert.Equal(3, articleCount);
+        }
+
+        [Fact]
+        public void EditArticle_Should_Throw_When_Article_Not_Found()
         {
             //Arrange
-            var articleService = this.ResolveService<IArticlesService>();
-            var articleView = new ArticleViewModel()
-            {
-                Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
-                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-                Title = "Some dumb title123123",
-                Approved = false
-            };
+            var articleView = TestData.ArticleView;
           
             //Act
             var articles = ResolveService<GameBlogDbContext>().Articles;
@@ -317,18 +258,11 @@ namespace GameBlog.Test.Services
         public void DeleteArticle_Should_Throw_If_Article_Not_Found()
         {
             //Arrange
-            var articleSerivce = this.ResolveService<IArticlesService>();
-            var articleView = new ArticleViewModel()
-            {
-                Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
-                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-                Title = "Some dumb title123123",
-                Approved = false
-            };
+            var articleView = TestData.ArticleView;
 
             //Act
             var articles = ResolveService<GameBlogDbContext>().Articles;
-            Action? action = () => articleSerivce.DeleteArticle(articleView.Id);
+            Action? action = () => articleService.DeleteArticle(articleView.Id);
 
             //Assert
             Assert.Throws<ArgumentNullException>(action);
@@ -338,21 +272,14 @@ namespace GameBlog.Test.Services
         public void DeleteArticle_Should_Delete_Article_From_DB()
         {
             //Arrange
-            var articleSerivce = this.ResolveService<IArticlesService>();
-            var articleView = new ArticleViewModel()
-            {
-                Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
-                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-                Title = "Some dumb title123123",
-                Approved = false
-            };
+            var articleView = TestData.ArticleView;
             
             //Act
             var articles = ResolveService<GameBlogDbContext>().Articles;
-            articleSerivce.CreateArticle(articleView);
+            articleService.CreateArticle(articleView);
             var initialArticlesCount = articles.Count();
 
-            articleSerivce.DeleteArticle(articleView.Id);
+            articleService.DeleteArticle(articleView.Id);
             var afterDeleteArticlesCount = articles.Count();
 
             //Assert
@@ -363,35 +290,42 @@ namespace GameBlog.Test.Services
         public void Approve_Should_Throw_If_Article_Is_Null()
         {
             //Arrange
-            var articleSerivce = this.ResolveService<IArticlesService>();
-            var articleView = new ArticleViewModel()
-            {
-                Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
-                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-                Title = "Some dumb title123123",
-                Approved = false
-            };
+            var articleView = TestData.ArticleView;
 
             //Act
             var articles = ResolveService<GameBlogDbContext>().Articles;
-            var action = () => articleSerivce.Approve(articleView.Id);
+            var action = () => articleService.Approve(articleView.Id);
 
             //Assert
             Assert.Throws<ArgumentNullException>(action);
         }
 
         [Fact]
+        public void Approve_Should_Change_Article_Property()
+        {
+            //Arrange
+            var articles = ResolveService<GameBlogDbContext>().Articles;
+
+            var articleView = TestData.ArticleViewWithId;
+            articleService.CreateArticle(articleView);
+
+            bool isApproved = true;
+            bool isApprovedInitially = articleView.Approved;
+
+            articleService.Approve(articleView.Id);
+
+            var newArticleView = articles.FirstOrDefault(x => x.Id == articleView.Id);
+
+            Assert.Equal(isApproved, newArticleView.Approved);
+        }
+
+        [Fact]
         public void PostComment_Should_Throw_When_ArticleData_Does_Not_Exist()
         {
             //Arrange
-            var articleSerivce = this.ResolveService<IArticlesService>();
-            var articleView = new ArticleViewModel()
-            {
-                Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
-                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-                Title = "Some dumb title123123",
-                Approved = false
-            };
+            var articleService = this.ResolveService<IArticlesService>();
+            var articleView = TestData.ArticleView;
+
             CommentViewModel commentView = new CommentViewModel
             {
                 ArticleId = articleView.Id,
@@ -399,32 +333,43 @@ namespace GameBlog.Test.Services
             };
 
             //Act
-            var action = () => articleSerivce.PostComment(commentView);
+            var action = () => articleService.PostComment(commentView);
 
             //Assert
             Assert.ThrowsAsync<ArgumentNullException>(action);
 
         }
-    }
-}
 
-public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
-{
-    public TestAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
-        Microsoft.Extensions.Logging.ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
-        : base(options, logger, encoder, clock)
-    {
-    }
+        [Fact]
+        public void EditArticle_Should_Change_Article_Data()
+        {
+            //Arrange
+            var articleService = this.ResolveService<IArticlesService>();
+            var articles = ResolveService<GameBlogDbContext>().Articles;
 
-    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
-    {
-        var claims = new[] { new Claim(ClaimTypes.Name, "Test user"), new Claim(ClaimTypes.Role, "Administrator") };
-        var identity = new ClaimsIdentity(claims, "Test");
-        var principal = new ClaimsPrincipal(identity);
-        var ticket = new AuthenticationTicket(principal, "Test");
+            var articleView = TestData.ArticleViewWithId;
+            articleService.CreateArticle(articleView);
 
-        var result = AuthenticateResult.Success(ticket);
+            var initialTitle = articleView.Title;
+            var initialContent = articleView.Content;
 
-        return Task.FromResult(result);
+            var newTitle = "Something different";
+            var newContent = "More stuff to fill 30 characters with";
+
+            articleView.Title = newTitle;
+            articleView.Content = newContent;
+
+            //Act
+            articleService.EditArticle(articleView);
+
+            //Assert
+            Assert.NotEqual(initialContent, articleView.Content);
+            Assert.NotEqual(initialTitle, articleView.Title);
+
+            Assert.Equal(newTitle, articleView.Title);
+            Assert.Equal(newContent, articleView.Content);
+
+           
+        }
     }
 }

@@ -81,8 +81,6 @@ namespace GameBlog.Services
             db.SaveChanges();
         }
 
-       
-
         public void EditArticle(ArticleViewModel article)
         {
             var articleData = db.Articles.Find(article.Id);

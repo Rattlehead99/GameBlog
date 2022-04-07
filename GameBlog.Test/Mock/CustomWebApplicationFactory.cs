@@ -21,10 +21,23 @@ using Microsoft.AspNetCore.Http;
 
 namespace GameBlog.Test.Mock
 {
+    public record DependencyScope(AsyncServiceScope Scope, GameBlogDbContext Db)
+    {
+        public T ResolveService<T>()
+            where T : notnull
+        {
+            return Scope.ServiceProvider.GetRequiredService<T>();
+        }
+    };
+
     public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
 
         public static readonly Guid UserId = Guid.NewGuid();
+        public static readonly Guid GameId = Guid.NewGuid();
+        public static readonly Guid RatingId = Guid.NewGuid();
+        private readonly AsyncServiceScope scope;
+        protected GameBlogDbContext db;
 
         protected override void ConfigureClient(HttpClient client)
         {
@@ -33,75 +46,47 @@ namespace GameBlog.Test.Mock
                 new AuthenticationHeaderValue("Test");
         }
 
+
+        public DependencyScope InitDb()
+        {
+            var scope = Services.CreateAsyncScope();
+            db = ResolveService<GameBlogDbContext>();
+            db.Database.EnsureDeleted();
+            Services.AddTestData().GetAwaiter().GetResult();
+            return new (scope, db);
+        }
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             base.ConfigureWebHost(builder);
             builder
             .ConfigureTestServices(async svc =>
             {
-                var descriptor = svc.SingleOrDefault(
-                d => d.ServiceType ==
-                    typeof(DbContextOptions<GameBlogDbContext>));
-
-                svc.Remove(descriptor);
+                svc.RemoveService<DbContextOptions<GameBlogDbContext>>();
 
                 svc.AddAuthentication("Test")
-                        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", x => { });
+                   .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", x => { });
 
                 svc.AddDbContext<GameBlogDbContext>(options =>
                 {
                     options.UseInMemoryDatabase("MemoryDataBase");
                 });
 
-                var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-                var claimsPrincipal = new ClaimsPrincipal(
-                    new ClaimsIdentity(
-                        new Claim[] { new Claim(ClaimTypes.NameIdentifier, UserId.ToString()) }
-                        )
-                    );
-
-                mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(claimsPrincipal);
-
-                descriptor = svc.SingleOrDefault(
-                d => d.ServiceType ==
-                    typeof(IHttpContextAccessor));
-                svc.Remove(descriptor);
-
-                svc.AddSingleton<IHttpContextAccessor>(mockHttpContextAccessor.Object);
+                svc.AddTestHttpContextAccessor();
 
                 var sp = svc.BuildServiceProvider();
 
-                using (var scope = sp.CreateScope())
-                {
-                    var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<GameBlogDbContext>();
-                    var userManager = scopedServices.GetRequiredService<UserManager<User>>();
+                //await sp.AddTestData();
 
-
-                    db.Database.EnsureCreated();
-
-
-                    await userManager.CreateAsync(new User
-                    {
-                        Id = UserId,
-                        UserName = "smth@gmail.com",
-                        Email = "smth@gmail.com",
-                        NormalizedUserName = "SMTH@GMAIL.COM".Normalize().ToUpperInvariant()
-                    });
-
-                    db.Articles.Add(new Article
-                    {
-                        Id = Guid.NewGuid(),
-                        UserId = UserId,
-                        Content = "Bulshiser that should reach 30 symbols at the very least",
-                        ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-                        Title = "Some dumb title",
-                        Approved = false,
-
-                    });
-                    db.SaveChanges();
-                }
             });
         }
+
+        private T ResolveService<T>()
+         where T : notnull
+        {
+            return this.Services.CreateAsyncScope().ServiceProvider.GetRequiredService<T>();
+        }
+
+
     }
 }
