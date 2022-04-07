@@ -39,7 +39,6 @@
                 Id = game.Id,
                 ImageUrl = game.ImageUrl,
                 Ratings = game.Ratings,
-
             };
 
             db.Games.Add(gameData);
@@ -56,6 +55,14 @@
                 throw new ArgumentNullException(nameof(id));
             }
 
+            var rating = db.Ratings.Where(r => r.GameId == game.Id);
+
+            if (rating == null)
+            {
+                throw new ArgumentNullException(nameof(rating));
+            }
+
+            db.Ratings.RemoveRange(rating);
             db.Games.Remove(game);
             db.SaveChanges();
         }

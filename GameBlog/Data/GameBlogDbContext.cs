@@ -55,28 +55,6 @@ namespace GameBlog.Data
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-           /* modelBuilder.Entity<User>().HasData(
-                user = new User
-                {
-                    FullName = "Kuche kotka",
-                    Email = "ikovachev99@gmail.com",
-                    Articles = new List<Article>(),
-                    Password = "qaz12345",
-                    Reputation = 1,
-                    Ratings = new List<Rating>(),
-                    Comments = new List<Comment>()
-                });*/
-          
-            /*modelBuilder.Entity<Article>().HasData(
-                new Article
-                {
-                    Title = "Call of Duty",
-                    Content = "Who gives a damn for this one?",
-                    ImageUrl = "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80",
-                    User = user,
-                    Comments = new List<Comment>()
-                });*/
-
             base.OnModelCreating(modelBuilder);
 
             

@@ -338,7 +338,7 @@ namespace GameBlog.Test.Services
         public void EditArticle_Should_Change_Article_Data()
         {
             //Arrange
-            var articleService = scope.ResolveService<IArticlesService>();
+            //var articleService = scope.ResolveService<IArticlesService>();
             var articles = scope.ResolveService<GameBlogDbContext>().Articles;
 
             var articleView = TestData.ArticleViewWithId;
@@ -364,6 +364,20 @@ namespace GameBlog.Test.Services
             Assert.Equal(newContent, articleView.Content);
 
            
+        }
+
+        [Fact]
+        public void GetAllArticles_Should_Return_AllArticlesViewModel()
+        {
+            //Arrange
+            int pageNumber = 1;
+            string searchText = "";
+
+            //Act
+            var result = articleService.GetAllArticles(pageNumber, searchText);
+
+            //Assert
+            Assert.IsType<AllArticlesViewModel>(result);
         }
     }
 }
