@@ -8,13 +8,13 @@ namespace GameBlog.Services
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
-    public class UsersServicecs : IUsersService
+    public class UsersService : IUsersService
     {
         private readonly GameBlogDbContext db;
         private readonly UserManager<User> userManager;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public UsersServicecs(GameBlogDbContext db, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
+        public UsersService(GameBlogDbContext db, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
         {
             this.db = db;
             this.userManager = userManager;
@@ -24,7 +24,7 @@ namespace GameBlog.Services
         public AllUsersViewModel GetAllUsers(int pageNumber, string searchText)
         {
             int pageSize = 6;
-            double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
+            double pageCount = Math.Ceiling(db.Users.Count() / (double)pageSize);
 
             if (pageNumber < 1)
             {

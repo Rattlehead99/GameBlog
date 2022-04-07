@@ -44,7 +44,7 @@ namespace GameBlog.Test.Services
 
         public ArticlesServiceTest(CustomWebApplicationFactory factory)
         {
-            CreateService();
+            this.CreateService();
             this.factory = factory;
             scope = factory.Services.CreateAsyncScope();
         }
@@ -107,7 +107,7 @@ namespace GameBlog.Test.Services
         [Fact]
         public async Task CreateArticle_Should_Add_An_Article_In_DB()
         {
-            CreateService();
+            this.CreateService();
 
             ArticleViewModel articleView = new ArticleViewModel
             {
@@ -224,51 +224,52 @@ namespace GameBlog.Test.Services
             //Assert
             Assert.IsType<ArticleViewModel>(details);
         }
+        #region TODO: PostComment returns CommentViewModel
+        //[Fact]
+        //public async Task PostComment_Should_Return_CommentViewModel()
+        //{
+        //    //Arrange
+        //    GameBlogDbContext? data = DataBaseMock.Instance;
 
-        [Fact]
-        public async Task PostComment_Should_Return_CommentViewModelAsync()
-        {
-            //Arrange
-            GameBlogDbContext? data = DataBaseMock.Instance;
+        //    IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
+        //    var loggedUser = httpContextAccessor.HttpContext?.User;
 
-            IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
-            var loggedUser = httpContextAccessor.HttpContext?.User;
+        //    Mock<IUserStore<User>> userStoreMock = new Mock<IUserStore<User>>();
+        //    IUserStore<User>? userStore = userStoreMock.Object;
 
-            Mock<IUserStore<User>> userStoreMock = new Mock<IUserStore<User>>();
-            IUserStore<User>? userStore = userStoreMock.Object;
+        //    UserManager<User>? userManager = UserManagerMock.TestUserManager(userStore);
+        //    var articleId = Guid.NewGuid();
 
-            UserManager<User>? userManager = UserManagerMock.TestUserManager(userStore);
-            var articleId = Guid.NewGuid();
+        //    CommentViewModel commentView = new CommentViewModel
+        //    {
+        //        ArticleId = articleId,
+        //        Content = "Comment Test"
+        //    };
 
-            CommentViewModel commentView = new CommentViewModel
-            {
-                ArticleId = articleId,
-                Content = "Comment Test"
-            };
+        //    data.Articles.Add(new Article
+        //    {
+        //        Id = articleId,
+        //        UserId = Guid.Parse("{768CCB3A-C7AC-4141-BC00-5348116856E4}"),
+        //        Content = "Bulshiser that should reach 30 symbols at the very least",
+        //        ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
+        //        Title = "Some dumb title",
+        //        Comments = new List<Comment>
+        //        {
+        //            new Comment { Id = articleId, Content = "TestComment"}
+        //        }
+        //    });
+        //    data.SaveChanges();
 
-            data.Articles.Add(new Article
-            {
-                Id = articleId,
-                UserId = Guid.Parse("{768CCB3A-C7AC-4141-BC00-5348116856E4}"),
-                Content = "Bulshiser that should reach 30 symbols at the very least",
-                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-                Title = "Some dumb title",
-                Comments = new List<Comment>
-                {
-                    new Comment { Id = articleId, Content = "TestComment"}
-                }
-            });
-            data.SaveChanges();
+        //    var articleService = new ArticlesService(data, userManager, httpContextAccessor);
 
-            var articleService = new ArticlesService(data, userManager, httpContextAccessor);
+        //    //Act
+        //    var commentViewData = await articleService.PostComment(commentView);
 
-            //Act
-            var commentViewData = await articleService.PostComment(commentView);
+        //    //Assert
+        //    Assert.IsType<CommentViewModel>(commentViewData);
 
-            //Assert
-            Assert.IsType<CommentViewModel>(commentViewData);
-
-        }
+        //}
+        #endregion
 
         [Fact]
         public async Task Create_Should_Add_Article_To_DB()
@@ -293,6 +294,7 @@ namespace GameBlog.Test.Services
         [Fact]
         public async void EditArticle_Should_Throw_When_Article_Not_Found()
         {
+            //Arrange
             var articleService = this.ResolveService<IArticlesService>();
             var articleView = new ArticleViewModel()
             {
@@ -302,22 +304,109 @@ namespace GameBlog.Test.Services
                 Approved = false
             };
           
+            //Act
             var articles = ResolveService<GameBlogDbContext>().Articles;
+            Action? action = () => articleService.EditArticle(articleView);
 
-            Assert.Throws<ArgumentNullException>(() => articleService.EditArticle(articleView));
+            //Assert
+            Assert.Throws<ArgumentNullException>(action);
 
         }
 
         [Fact]
-        [Theory]
-        [InlineData()]
-        public void DeleteArticle_Should_Delete_Article_From_DB(Guid id)
+        public void DeleteArticle_Should_Throw_If_Article_Not_Found()
         {
+            //Arrange
+            var articleSerivce = this.ResolveService<IArticlesService>();
+            var articleView = new ArticleViewModel()
+            {
+                Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
+                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
+                Title = "Some dumb title123123",
+                Approved = false
+            };
+
+            //Act
+            var articles = ResolveService<GameBlogDbContext>().Articles;
+            Action? action = () => articleSerivce.DeleteArticle(articleView.Id);
+
+            //Assert
+            Assert.Throws<ArgumentNullException>(action);
+        }
+
+        [Fact]
+        public void DeleteArticle_Should_Delete_Article_From_DB()
+        {
+            //Arrange
+            var articleSerivce = this.ResolveService<IArticlesService>();
+            var articleView = new ArticleViewModel()
+            {
+                Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
+                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
+                Title = "Some dumb title123123",
+                Approved = false
+            };
+            
+            //Act
+            var articles = ResolveService<GameBlogDbContext>().Articles;
+            articleSerivce.CreateArticle(articleView);
+            var initialArticlesCount = articles.Count();
+
+            articleSerivce.DeleteArticle(articleView.Id);
+            var afterDeleteArticlesCount = articles.Count();
+
+            //Assert
+            Assert.NotEqual(afterDeleteArticlesCount, initialArticlesCount);
+        }
+
+        [Fact]
+        public void Approve_Should_Throw_If_Article_Is_Null()
+        {
+            //Arrange
+            var articleSerivce = this.ResolveService<IArticlesService>();
+            var articleView = new ArticleViewModel()
+            {
+                Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
+                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
+                Title = "Some dumb title123123",
+                Approved = false
+            };
+
+            //Act
+            var articles = ResolveService<GameBlogDbContext>().Articles;
+            var action = () => articleSerivce.Approve(articleView.Id);
+
+            //Assert
+            Assert.Throws<ArgumentNullException>(action);
+        }
+
+        [Fact]
+        public void PostComment_Should_Throw_When_ArticleData_Does_Not_Exist()
+        {
+            //Arrange
+            var articleSerivce = this.ResolveService<IArticlesService>();
+            var articleView = new ArticleViewModel()
+            {
+                Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
+                ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
+                Title = "Some dumb title123123",
+                Approved = false
+            };
+            CommentViewModel commentView = new CommentViewModel
+            {
+                ArticleId = articleView.Id,
+                Content = "Comment Test"
+            };
+
+            //Act
+            var action = () => articleSerivce.PostComment(commentView);
+
+            //Assert
+            Assert.ThrowsAsync<ArgumentNullException>(action);
 
         }
     }
 }
-
 
 public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {

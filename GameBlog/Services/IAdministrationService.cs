@@ -10,7 +10,7 @@
 
     public interface IAdministrationService
     {
-        public AllUsersViewModel AllUsers(string searchText);
+        public AllUsersViewModel AllUsers(string searchText, int pageNumber);
 
         public UserViewModel AdministratedUser(Guid id);
 

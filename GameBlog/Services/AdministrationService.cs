@@ -59,9 +59,24 @@
             return userViewModel;
         }
 
-        public AllUsersViewModel AllUsers(string searchText)
+        public AllUsersViewModel AllUsers(string searchText, int pageNumber)
         {
-            var usersQuery = db.Users.AsQueryable();
+            int pageSize = 6;
+            double pageCount = Math.Ceiling(db.Users.Count() / (double)pageSize);
+
+            if (pageNumber < 1)
+            {
+                pageNumber++;
+            }
+            if (pageNumber > pageCount)
+            {
+                pageNumber--;
+            }
+
+            var usersQuery = db.Users
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsQueryable();
 
             if (!String.IsNullOrEmpty(searchText))
             {
@@ -82,7 +97,8 @@
 
             return new AllUsersViewModel
             {
-                Users = users
+                Users = users,
+                PageNumber = pageNumber
             };
         }
 

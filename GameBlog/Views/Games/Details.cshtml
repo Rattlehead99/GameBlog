@@ -26,7 +26,7 @@
                         }
                         else
                         {
-                            <h2>Game Rating: @Model.Ratings.Average(r => r.RatingValue)</h2>
+                            <h2>Game Rating: @Math.Round(Model.Ratings.Average(r =>r.RatingValue), 2)</h2>
                         }
                     </div>
                 </div>

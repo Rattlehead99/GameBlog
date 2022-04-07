@@ -105,7 +105,7 @@
         public AllGamesViewModel GetAllGames(int pageNumber, string searchText)
         {
             int pageSize = 6;
-            double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
+            double pageCount = Math.Ceiling(db.Games.Count() / (double)pageSize);
 
             if (pageNumber < 1)
             {
@@ -166,6 +166,10 @@
 
         public async Task RateGame(RatingViewModel rating)
         {
+            if (!(rating.RatingValue >= 1  && rating.RatingValue <= 10))
+            {
+                rating.RatingValue = 1;
+            }
             ClaimsPrincipal? userContext = httpContextAccessor.HttpContext?.User;
             User? user = await userManager.GetUserAsync(userContext);
 

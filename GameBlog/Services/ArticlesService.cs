@@ -44,6 +44,7 @@ namespace GameBlog.Services
             {
                 article.Approved = false;
             }
+
             db.SaveChanges();
         }
             

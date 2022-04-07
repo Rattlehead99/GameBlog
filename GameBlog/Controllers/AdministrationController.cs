@@ -19,9 +19,9 @@ namespace GameBlog.Controllers
             this.administrationService = administrationService;
         }
 
-        public IActionResult Index(string searchText)
+        public IActionResult Index(string searchText="", int pageNumber=1)
         {
-            var users = administrationService.AllUsers(searchText);
+            var users = administrationService.AllUsers(searchText, pageNumber);
 
             return View(users);
 

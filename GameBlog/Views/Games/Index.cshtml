@@ -12,7 +12,7 @@
     <div class="card single_post">
         <div class="card">
             <div class="body search">
-                <div class="input-group m-b-0">
+                <div class="input-group m-b-2">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fa fa-search"></i></span>
                     </div>
@@ -26,7 +26,7 @@
 
 @if (!Model.Games.Any())
 {
-    <h1>No articles available right now</h1>
+    <h1>No games available right now</h1>
 }
 else
 {
@@ -53,6 +53,6 @@ else
     </div>
     <div>
         <a class="btn btn-primary" asp-action="Index" asp-controller="Games" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous Page</a>
-        <a  class="btn btn-primary" asp-action="Index" asp-controller="Games" asp-route-pageNumber="@(Model.PageNumber + 1)">Next Page</a>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Games" asp-route-pageNumber="@(Model.PageNumber + 1)">Next Page</a>
     </div>
 }

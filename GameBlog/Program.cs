@@ -18,7 +18,7 @@ public class Program
 
         builder.Services.AddScoped<IArticlesService, ArticlesService>();
         builder.Services.AddScoped<IGamesService, GamesService>();
-        builder.Services.AddScoped<IUsersService, UsersServicecs>();
+        builder.Services.AddScoped<IUsersService, UsersService>();
         builder.Services.AddScoped<IAdministrationService, AdministrationService>();
 
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
