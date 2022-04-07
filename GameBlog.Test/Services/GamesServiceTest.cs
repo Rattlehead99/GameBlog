@@ -218,24 +218,54 @@ namespace GameBlog.Test.Services
         }
 
         //[Fact]
-        //public void RateGame_Should_Update_Rating()
+        //public void RateGame_Should_Add_Rating()
         //{
         //    //Arrange
-        //    RatingViewModel ratingView = TestData.RatingView;
-        //    GameViewModel gameView = TestData.GameViewWithId;
-        //    var rating = gameView.Ratings.FirstOrDefault(r => r.GameId == gameView.Id);
-        //    rating.RatingValue = 5;
+        //    RatingViewModel ratingView = new RatingViewModel();
+        //    ratingView.GameId = scope.Db.Games.First().Id;
 
         //    //Act
+        //    var initialRatingsCount.
+        //    gamesService.RateGame(ratingView);
+
+        //    //Assert
+
+        //    Assert.NotEqual(initialRatingsCount, afterwardRatingsCount);
+        //}
+
+        //[Fact]
+        //public void RateGame_Should_Update_Rating_If_Null()
+        //{
+        //    //Arrange
+        //    RatingViewModel ratingView = TestData.RatingViewWithoutRatingValue;
+        //    var game = scope.Db.Games.First();
+        //    ratingView.GameId = game.Id;
+            
         //    var initialRatingsCount = scope.Db.Ratings.Count();
+
+        //    //Act
+            
         //    gamesService.RateGame(ratingView);
         //    var afterwardRatingsCount = scope.Db.Ratings.Count();
 
         //    //Assert
-        //    Assert.Equal(2, afterwardRatingsCount);
 
         //    Assert.NotEqual(initialRatingsCount, afterwardRatingsCount);
         //}
+
+        [Fact]
+        public async Task RateGame_Should_Throw_If_Game_Is_Null()
+        {
+            //Arrange
+            RatingViewModel ratingView = TestData.RatingView;
+            ratingView.GameId = Guid.NewGuid();
+
+            //Act
+            Func<Task> action = () => gamesService.RateGame(ratingView);
+
+            //Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(action);
+        }
 
     }
 }

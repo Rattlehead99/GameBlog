@@ -31,6 +31,15 @@ namespace GameBlog.Test.TestConstants
             Approved = false
         };
 
+        public static ArticleViewModel ArticleViewWithIdAndApproved => new ArticleViewModel()
+        {
+            Id = ArticleId,
+            Content = "Bulshiser that should reach 30 symbols at the very leasfdhhgfcdsvhfsdgsdfgdfsgdsfgsdfgdfst",
+            ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
+            Title = "Some dumb title123123",
+            Approved = true
+        };
+
         public static GameViewModel GameView => new GameViewModel()
         {
             Description = "Some Description that is 30 symbols long maybe",
@@ -78,6 +87,28 @@ namespace GameBlog.Test.TestConstants
         {
             GameId = GameId,
             RatingValue = 10
+        };
+        public static RatingViewModel RatingViewWithoutRatingValue => new RatingViewModel()
+        {
+            GameId = GameId
+        };
+
+        public static UserViewModel UserView => new UserViewModel()
+        {
+            Id = UserId,
+            Articles = new List<Article>(),
+            Email = "smth@gmail.com",
+            Ratings = new List<Rating>
+            {
+                new Rating()
+                {
+                    GameId = GameId,
+                    UserId = UserId
+                }
+            },
+            Reputation = 1,
+            UserName = "smth@gmail.com"
+            
         };
     }
 }

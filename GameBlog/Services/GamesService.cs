@@ -173,14 +173,10 @@
 
         public async Task RateGame(RatingViewModel rating)
         {
-            if (!(rating.RatingValue >= 1  && rating.RatingValue <= 10))
-            {
-                rating.RatingValue = 1;
-            }
             ClaimsPrincipal? userContext = httpContextAccessor.HttpContext?.User;
             User? user = await userManager.GetUserAsync(userContext);
 
-            var gameData = db.Games.Any(g => g.Id == rating.GameId);
+            bool gameData = db.Games.Any(g => g.Id == rating.GameId);
 
             if (!gameData)
             {

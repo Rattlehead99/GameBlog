@@ -314,6 +314,27 @@ namespace GameBlog.Test.Services
         }
 
         [Fact]
+        public void Approve_Should_Change_Article_Property_To_False()
+        {
+            //Arrange
+            var articles = scope.ResolveService<GameBlogDbContext>().Articles;
+
+            var articleView = TestData.ArticleViewWithIdAndApproved;
+            articleView.Id = scope.Db.Articles.First().Id;
+
+
+            bool isApproved = false;
+            bool isApprovedInitially = articleView.Approved;
+
+            articleService.Approve(articleView.Id);
+            articleService.Approve(articleView.Id);
+
+            var newArticleView = articles.FirstOrDefault(x => x.Id == articleView.Id);
+
+            Assert.Equal(isApproved, newArticleView.Approved);
+        }
+
+        [Fact]
         public void PostComment_Should_Throw_When_ArticleData_Does_Not_Exist()
         {
             //Arrange
