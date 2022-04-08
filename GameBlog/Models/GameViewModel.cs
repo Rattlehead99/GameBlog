@@ -25,6 +25,7 @@ namespace GameBlog.Models
         [Url]
         public string ImageUrl { get; set; }
 
+        [Required]
         public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
     }
 }
