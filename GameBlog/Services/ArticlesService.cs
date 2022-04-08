@@ -17,11 +17,14 @@ namespace GameBlog.Services
         private readonly GameBlogDbContext db;
         private readonly UserManager<User> userManager;
         private readonly IHttpContextAccessor httpContextAccessor;
-        public ArticlesService(GameBlogDbContext db, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
+        private readonly IPaginationService paginationService;
+
+        public ArticlesService(GameBlogDbContext db, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor, IPaginationService paginationService)
         {
             this.db = db;
             this.userManager = userManager;
             this.httpContextAccessor = httpContextAccessor;
+            this.paginationService = paginationService;
         }
 
         public void Approve(Guid id)
@@ -100,22 +103,17 @@ namespace GameBlog.Services
 
         public AllArticlesViewModel GetAllArticles(int pageNumber=1, string searchText="")
         {
-            int pageSize = 6;
-            double pageCount = Math.Ceiling(db.Articles.Count() / (double)pageSize);
-
-            if (pageNumber < 1)
-            {
-                pageNumber++;
-            }
-            if (pageNumber > pageCount)
-            {
-                pageNumber--;
-            }
-
             var articlesQuery = db.Articles
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .OrderByDescending(a => a.PostDate).AsQueryable();
+                .Where(a => a.Approved == true)
+                .OrderByDescending(a => a.PostDate)
+                .AsQueryable();
+
+            int newPageNumber = paginationService
+                .PageCorrection(pageNumber, articlesQuery);
+
+            articlesQuery = paginationService
+                .Pagination(newPageNumber, articlesQuery);
+
 
             if (!String.IsNullOrEmpty(searchText))
             {
@@ -137,7 +135,7 @@ namespace GameBlog.Services
             return new AllArticlesViewModel
             {
                 Articles = articles,
-                PageNumber = pageNumber
+                PageNumber = newPageNumber
                 
             };
         }

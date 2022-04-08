@@ -18,7 +18,7 @@ namespace GameBlog.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Index(int pageNumber = 1, string searchText ="")
+        public IActionResult Index(int pageNumber, string searchText)
         {
             var articles = articlesService.GetAllArticles(pageNumber, searchText);
 

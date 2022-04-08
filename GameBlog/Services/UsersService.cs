@@ -13,32 +13,26 @@ namespace GameBlog.Services
         private readonly GameBlogDbContext db;
         private readonly UserManager<User> userManager;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IPaginationService paginationService;
 
-        public UsersService(GameBlogDbContext db, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
+        public UsersService(GameBlogDbContext db, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor, IPaginationService paginationService)
         {
             this.db = db;
             this.userManager = userManager;
             this.httpContextAccessor = httpContextAccessor;
+            this.paginationService = paginationService;
         }
 
-        public AllUsersViewModel GetAllUsers(int pageNumber, string searchText)
+        public AllUsersViewModel GetAllUsers(int pageNumber=1, string searchText="")
         {
-            int pageSize = 6;
-            double pageCount = Math.Ceiling(db.Users.Count() / (double)pageSize);
-
-            if (pageNumber < 1)
-            {
-                pageNumber++;
-            }
-            if (pageNumber > pageCount)
-            {
-                pageNumber--;
-            }
-
             var usersQuery = db.Users
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
                 .AsQueryable();
+
+            int newPageNumber = paginationService
+                .PageCorrection(pageNumber, usersQuery);
+
+            usersQuery = paginationService
+                .Pagination(newPageNumber, usersQuery);
 
             if (!String.IsNullOrEmpty(searchText))
             {
@@ -60,7 +54,7 @@ namespace GameBlog.Services
             return new AllUsersViewModel
             {
                 Users = users,
-                PageNumber = pageNumber
+                PageNumber = newPageNumber
             };
         }
 

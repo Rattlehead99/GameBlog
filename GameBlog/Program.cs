@@ -20,6 +20,7 @@ public class Program
         .AddScoped<IGamesService, GamesService>()
         .AddScoped<IUsersService, UsersService>()
         .AddScoped<IAdministrationService, AdministrationService>()
+        .AddScoped<IPaginationService, PaginationService>()
         .AddDatabaseDeveloperPageExceptionFilter()
         .AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddRoles<IdentityRole<Guid>>()

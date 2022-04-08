@@ -76,6 +76,8 @@ namespace GameBlog.Test.Services
             UserManager<User>? userManager = UserManagerMock.TestUserManager(userStore);
             var articleId = Guid.NewGuid();
 
+            IPaginationService paginationService = new PaginationService(data);
+
             data.Articles.Add(new Article   
             {
                 Id = articleId,
@@ -86,7 +88,7 @@ namespace GameBlog.Test.Services
             });
             data.SaveChanges();
 
-            var articleService = new ArticlesService(data, userManager, httpContextAccessor);
+            var articleService = new ArticlesService(data, userManager, httpContextAccessor, paginationService);
 
             //Act
             var result = articleService.GetArticleById(articleId);
@@ -110,6 +112,8 @@ namespace GameBlog.Test.Services
             UserManager<User>? userManager = UserManagerMock.TestUserManager(userStore);
             var articleId = Guid.NewGuid();
 
+            IPaginationService paginationService = new PaginationService(data);
+
             data.Articles.Add(new Article
             {
                 Id = Guid.NewGuid(),
@@ -120,7 +124,7 @@ namespace GameBlog.Test.Services
             });
             data.SaveChanges();
 
-            var articleService = new ArticlesService(data, userManager, httpContextAccessor);
+            var articleService = new ArticlesService(data, userManager, httpContextAccessor, paginationService);
 
             //Assert
             Assert.Throws<ArgumentNullException>(() => articleService.GetArticleById(articleId));
@@ -141,6 +145,8 @@ namespace GameBlog.Test.Services
             UserManager<User>? userManager = UserManagerMock.TestUserManager(userStore);
             var articleId = Guid.NewGuid();
 
+            IPaginationService paginationService = new PaginationService(data);
+
             data.Articles.Add(new Article
             {
                 Id = articleId,
@@ -151,7 +157,7 @@ namespace GameBlog.Test.Services
             });
             data.SaveChanges();
 
-            var articleService = new ArticlesService(data, userManager, httpContextAccessor);
+            var articleService = new ArticlesService(data, userManager, httpContextAccessor, paginationService);
 
             //Act
             var details = articleService.Details(articleId);

@@ -14,12 +14,14 @@
         private readonly GameBlogDbContext db;
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole<Guid>> roleManager;
+        private readonly IPaginationService paginationService;
 
-        public AdministrationService(GameBlogDbContext db, UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager)
+        public AdministrationService(GameBlogDbContext db, UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager, IPaginationService paginationService)
         {
             this.db = db;
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.paginationService = paginationService;
         }
 
         public UserViewModel AdministratedUser(Guid id)
@@ -61,22 +63,14 @@
 
         public AllUsersViewModel AllUsers(string searchText, int pageNumber)
         {
-            int pageSize = 6;
-            double pageCount = Math.Ceiling(db.Users.Count() / (double)pageSize);
-
-            if (pageNumber < 1)
-            {
-                pageNumber++;
-            }
-            if (pageNumber > pageCount)
-            {
-                pageNumber--;
-            }
-
             var usersQuery = db.Users
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
                 .AsQueryable();
+
+            int newPageNumber = paginationService
+                .PageCorrection(pageNumber, usersQuery);
+
+            usersQuery = paginationService
+                .Pagination(newPageNumber, usersQuery);
 
             if (!String.IsNullOrEmpty(searchText))
             {
@@ -98,7 +92,7 @@
             return new AllUsersViewModel
             {
                 Users = users,
-                PageNumber = pageNumber
+                PageNumber = newPageNumber
             };
         }
 

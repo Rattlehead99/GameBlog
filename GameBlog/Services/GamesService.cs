@@ -15,12 +15,14 @@
         private readonly GameBlogDbContext db;
         private readonly UserManager<User> userManager;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IPaginationService paginationService;
 
-        public GamesService(GameBlogDbContext db, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
+        public GamesService(GameBlogDbContext db, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor, IPaginationService paginationService)
         {
             this.db = db;
             this.userManager = userManager;
             this.httpContextAccessor = httpContextAccessor;
+            this.paginationService = paginationService;
         }
 
 
@@ -111,22 +113,13 @@
 
         public AllGamesViewModel GetAllGames(int pageNumber, string searchText)
         {
-            int pageSize = 6;
-            double pageCount = Math.Ceiling(db.Games.Count() / (double)pageSize);
-
-            if (pageNumber < 1)
-            {
-                pageNumber++;
-            }
-            if (pageNumber > pageCount)
-            {
-                pageNumber--;
-            }
-
-            var games = db.Games.OrderBy(g => g.Name)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+            var games = db.Games
+                .OrderBy(g => g.Name)
                 .AsQueryable();
+
+            int newPageNumber = paginationService
+                .PageCorrection(pageNumber, games);
+            games = paginationService.Pagination(newPageNumber, games);
 
             if (!String.IsNullOrEmpty(searchText))
             {
@@ -148,7 +141,7 @@
             var allGames = new AllGamesViewModel
             {
                 Games = gamesData,
-                PageNumber = pageNumber
+                PageNumber = newPageNumber
             };
 
             return allGames;
