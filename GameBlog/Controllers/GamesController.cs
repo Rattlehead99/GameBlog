@@ -24,9 +24,9 @@ namespace GameBlog.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Index(int pageNumber, string searchText)
+        public IActionResult Index(int pageNumber, string searchText, string sortOrder)
         {
-            var allGames = gamesService.GetAllGames(pageNumber, searchText);
+            var allGames = gamesService.GetAllGames(pageNumber, searchText, sortOrder);
 
             return View(allGames);
         }

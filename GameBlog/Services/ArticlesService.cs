@@ -104,7 +104,6 @@ namespace GameBlog.Services
         public AllArticlesViewModel GetAllArticles(int pageNumber=1, string searchText="")
         {
             var articlesQuery = db.Articles
-                .Where(a => a.Approved == true)
                 .OrderByDescending(a => a.PostDate)
                 .AsQueryable();
 
@@ -139,6 +138,46 @@ namespace GameBlog.Services
                 
             };
         }
+
+        public AllArticlesViewModel GetAllApprovedArticles(int pageNumber = 1, string searchText = "")
+        {
+            var articlesQuery = db.Articles
+                .Where(a => a.Approved == true)
+                .OrderByDescending(a => a.PostDate)
+                .AsQueryable();
+
+            int newPageNumber = paginationService
+                .PageCorrection(pageNumber, articlesQuery);
+
+            articlesQuery = paginationService
+                .Pagination(newPageNumber, articlesQuery);
+
+
+            if (!String.IsNullOrEmpty(searchText))
+            {
+                articlesQuery = articlesQuery
+                    .Where(s => s.Title.Contains(searchText) || s.Content.Contains(searchText));
+            }
+
+            var articles = articlesQuery.Select(a => new ArticleViewModel
+            {
+                Id = a.Id,
+                Content = a.Content,
+                Title = a.Title,
+                ImageUrl = a.ImageUrl,
+                UserId = a.UserId,
+                Approved = a.Approved
+            })
+            .ToList();
+
+            return new AllArticlesViewModel
+            {
+                Articles = articles,
+                PageNumber = newPageNumber
+
+            };
+        }
+
         public ArticleViewModel Details(Guid id)
         {
             var article = db.Articles

@@ -195,12 +195,104 @@ namespace GameBlog.Test.Services
             //Arrange
             int pageNumber = 1;
             string searchText = "";
+            string sortOrder = "Alphabetical";
 
             //Act
-            var result = gamesService.GetAllGames(pageNumber, searchText);
+            var result = gamesService.GetAllGames(pageNumber, searchText, sortOrder);
 
             //Assert
             Assert.IsType<AllGamesViewModel>(result);
+        }
+
+        [Fact]
+        public void GetAllGames_Should_Order_Games_By_Name()
+        {
+            //Arrange
+            int pageNumber = 1;
+            string searchText = "";
+            string sortOrder = "Alphabetical";
+            List<Game> orderedGames = scope.Db.Games.OrderBy(g => g.Name).ToList();
+
+            //Act
+            var result = gamesService.GetAllGames(pageNumber, searchText, sortOrder);
+            var games = result.Games.ToArray();
+
+            //Assert
+            for (int i = 0; i < orderedGames.Count; i++)
+            {
+                Assert.Equal(orderedGames[i].Name, games[i].Name);
+            }
+
+        }
+
+        [Fact]
+        public void GetAllGames_Should_Order_Games_By_Average_Rating()
+        {
+            //Arrange
+            int pageNumber = 1;
+            string searchText = "";
+            string sortOrder = "Rating";
+            List<Game> orderedGames = scope.Db.Games
+                .OrderByDescending(g => Math.Round(g.Ratings.Average(r => r.RatingValue),2))
+                .ToList();
+
+            //Act
+            var result = gamesService.GetAllGames(pageNumber, searchText, sortOrder);
+            var games = result.Games.ToArray();
+
+            //Assert
+            for (int i = 0; i < orderedGames.Count; i++)
+            {
+                Assert.Equal(orderedGames[i].Name, games[i].Name);
+            }
+
+        }
+
+        [Fact]
+        public void GetAllGames_Should_Order_Games_By_Ratings_Count()
+        {
+            //Arrange
+            int pageNumber = 1;
+            string searchText = "";
+            string sortOrder = "Popularity";
+            List<Game> orderedGames = scope.Db.Games
+                .OrderByDescending(g => g.Ratings.Count())
+                .ToList();
+
+            //Act
+            var result = gamesService.GetAllGames(pageNumber, searchText, sortOrder);
+            var games = result.Games.ToArray();
+
+            //Assert
+            for (int i = 0; i < orderedGames.Count; i++)
+            {
+                Assert.Equal(orderedGames[i].Name, games[i].Name);
+            }
+
+        }
+
+
+        [Fact]
+        public void GetAllGames_Should_Order_Games_By_Name_When_Order_Value_Is_Wrong()
+        {
+            //Arrange
+            int pageNumber = 1;
+            string searchText = "";
+            string sortOrder = "Popularity";
+            List<Game> orderedGames = scope.Db.Games
+                .OrderBy(g => g.Name)
+                .ToList();
+
+            //Act
+            var result = gamesService.GetAllGames(pageNumber, searchText, sortOrder);
+            var games = result.Games.ToArray();
+
+            //Assert
+            for (int i = 0; i < orderedGames.Count; i++)
+            {
+                Assert.Equal(orderedGames[i].Name, games[i].Name);
+            }
+
         }
 
         [Fact]

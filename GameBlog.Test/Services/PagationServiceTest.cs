@@ -35,6 +35,20 @@ namespace GameBlog.Test.Services
             Assert.IsType<int>(newPageNumber);
 
         }
+        [Fact]
+        public void PageCorrection_Should_Return_PageCount_Equal_To_1_If_Its_Less()
+        {
+            //Arrange
+            int pageNumber = 1;
+            IQueryable<User> users = new List<User>().AsQueryable();
+
+            //Act
+            var newPageNumber = paginationService.PageCorrection(pageNumber, users);
+
+            //Assert
+            Assert.Equal(1, newPageNumber);
+
+        }
 
         [Fact]
         public void PageCorrection_Should_Return_1_If_Page_Number_Less_Than_1()

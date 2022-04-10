@@ -111,11 +111,27 @@
             db.SaveChanges();
         }
 
-        public AllGamesViewModel GetAllGames(int pageNumber, string searchText)
+        public AllGamesViewModel GetAllGames(int pageNumber, string searchText, string sortOrder)
         {
             var games = db.Games
                 .OrderBy(g => g.Name)
                 .AsQueryable();
+
+            switch(sortOrder)
+            {
+                case "Alphabetical":
+                    games = games.OrderBy(g => g.Name).AsQueryable();
+                    break;
+                case "Popularity":
+                    games = games.OrderByDescending(g => g.Ratings.Count()).AsQueryable();
+                    break;
+                case "Rating":
+                    games = games.OrderByDescending(g => Math.Round(g.Ratings.Average(r => r.RatingValue), 2));
+                    break;
+                default:
+                    games = games.OrderBy(g => g.Name).AsQueryable();
+                    break;
+            }
 
             int newPageNumber = paginationService
                 .PageCorrection(pageNumber, games);

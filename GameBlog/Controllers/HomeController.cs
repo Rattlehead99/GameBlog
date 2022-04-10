@@ -20,7 +20,7 @@ namespace GameBlog.Controllers
         [AllowAnonymous]
         public IActionResult Index(int pageNumber, string searchText)
         {
-            var articles = articlesService.GetAllArticles(pageNumber, searchText);
+            var articles = articlesService.GetAllApprovedArticles(pageNumber, searchText);
 
             return View(articles);
         }

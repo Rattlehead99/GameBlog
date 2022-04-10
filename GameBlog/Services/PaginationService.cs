@@ -16,6 +16,11 @@ namespace GameBlog.Services
             int pageSize = 6;
             double pageCount = Math.Ceiling(query.Count() / (double)pageSize);
 
+            if (pageCount < 1)
+            {
+                pageCount = 1;
+            }
+
             if (pageNumber < 1)
             {
                 pageNumber++;

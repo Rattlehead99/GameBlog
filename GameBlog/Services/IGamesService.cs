@@ -6,7 +6,7 @@
 
     public interface IGamesService
     {
-        public AllGamesViewModel GetAllGames(int pageNumber, string searchText);
+        public AllGamesViewModel GetAllGames(int pageNumber, string searchText, string sortOrder);
 
         public void CreateGame(GameViewModel game);
 

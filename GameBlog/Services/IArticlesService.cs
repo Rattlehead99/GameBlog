@@ -8,6 +8,8 @@
     {
         public AllArticlesViewModel GetAllArticles(int pageNumber, string searchText);
 
+        public AllArticlesViewModel GetAllApprovedArticles(int pageNumber, string searchText);
+
         public Task CreateArticle(ArticleViewModel article);
 
         public ArticleViewModel GetArticleById(Guid id);
