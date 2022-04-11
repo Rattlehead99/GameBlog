@@ -45,7 +45,12 @@ namespace GameBlog.Services
 
             if (testAdmin == null)
             {
-                return;
+                testAdmin = new User
+                {
+                    UserName = "ikovachev99@gmail.com",
+                    Email = "ikovachev99@gmail.com",
+                };
+                await userManager.AddPasswordAsync(testAdmin, "suzazatej123");
             }
 
             //testAdmin = new User
