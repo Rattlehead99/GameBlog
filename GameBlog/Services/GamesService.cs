@@ -140,7 +140,7 @@
             if (!String.IsNullOrEmpty(searchText))
             {
                 games = games
-                    .Where(s => s.Name.Contains(searchText) || s.Description.Contains(searchText));
+                    .Where(s => s.Name.Contains(searchText) || s.Description.Contains(searchText) || s.Genre.Contains(searchText));
             }
 
             var gamesData = games.Select(g => new GameViewModel
