@@ -10,6 +10,7 @@ using static GameBlog.Data.DataConstants.Role;
 
 namespace GameBlog.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class GamesController : Controller
     {
         private readonly GameBlogDbContext db;
@@ -40,6 +41,7 @@ namespace GameBlog.Controllers
 
         [HttpPost]
         [Authorize(Roles = Administrator)]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(GameViewModel game)
         {
 
@@ -64,6 +66,7 @@ namespace GameBlog.Controllers
 
         [HttpPost]
         [Authorize(Roles = Administrator)]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(GameViewModel game)
         {
 
@@ -90,6 +93,7 @@ namespace GameBlog.Controllers
         [HttpPost]
         [ActionName("Delete")]
         [Authorize(Roles = Administrator)]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteForm(Guid id)
         {
             if (!ModelState.IsValid)
@@ -118,6 +122,7 @@ namespace GameBlog.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RateGame(RatingViewModel rating)
         {
             if (!ModelState.IsValid)

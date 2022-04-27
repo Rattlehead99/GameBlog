@@ -8,7 +8,7 @@
 
     var user = await UserManager.GetUserAsync(User);
 }
-<form method="post" asp-action="Index" asp-controller="Games">
+<form method="post" asp-antiforgery="true" asp-action="Index" asp-controller="Games">
     <div class="card single_post">
         <div class="card">
             <div class="body search">

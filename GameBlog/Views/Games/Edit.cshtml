@@ -1,6 +1,6 @@
 ﻿@model GameViewModel
 
-<form method="post" asp-action="Edit">
+<form method="post" asp-antiforgery="true" asp-action="Edit">
     <div class="border-bottom p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">Edit Game</h2>

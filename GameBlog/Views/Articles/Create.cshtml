@@ -1,6 +1,6 @@
 ﻿@model ArticleViewModel
 
-<form method="post" asp-action="Create">
+<form method="post" asp-antiforgery="true" asp-action="Create">
     <div class="border-bottom p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">Create Article</h2>

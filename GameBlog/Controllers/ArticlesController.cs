@@ -12,7 +12,8 @@ namespace GameBlog.Controllers
     using Microsoft.EntityFrameworkCore;
     using System.Security.Claims;
     using static GameBlog.Data.DataConstants.Role;
-
+   
+    [AutoValidateAntiforgeryToken]
     public class ArticlesController : Controller
     {
         private readonly GameBlogDbContext db;
@@ -28,7 +29,7 @@ namespace GameBlog.Controllers
 
         [Authorize]
         public IActionResult Index(int pageNumber, string searchText)
-        {
+        {   
             var articles = articlesService.GetAllArticles(pageNumber, searchText);
 
             return View(articles);
@@ -43,6 +44,7 @@ namespace GameBlog.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ArticleViewModel article)
         {   
             if (!ModelState.IsValid)
@@ -66,6 +68,7 @@ namespace GameBlog.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(ArticleViewModel article)
         {
             if (!ModelState.IsValid)
@@ -90,6 +93,7 @@ namespace GameBlog.Controllers
         [HttpPost]
         [ActionName("Delete")]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteForm([FromForm] Guid id)
         {
 
@@ -119,6 +123,7 @@ namespace GameBlog.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostComment(CommentViewModel comment)
         {
             if (!ModelState.IsValid)
@@ -133,6 +138,7 @@ namespace GameBlog.Controllers
 
         [HttpPost]
         [Authorize(Roles = Administrator)]
+        [ValidateAntiForgeryToken]
         public IActionResult Approve(Guid id)
         {
             if (!ModelState.IsValid)

@@ -16,7 +16,7 @@
                     <h6 class="mb-0 ms-2">Games Rated</h6> <span>@Model.Ratings.Count</span>
                 </div>
                 <div>
-                    <form method="post" asp-action="ChangeUserRole" asp-controller="Administration" asp-route-id="@Model.Id">
+                    <form method="post" asp-antiforgery="true" asp-action="ChangeUserRole" asp-controller="Administration" asp-route-id="@Model.Id">
                             <button type="submit" class="btn btn-primary">Change Role</button> 
                         </form>
                 </div>

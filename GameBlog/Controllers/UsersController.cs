@@ -10,6 +10,7 @@ using System.Linq;
 
 namespace GameBlog.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class UsersController : Controller
     {
         private readonly IUsersService usersService;

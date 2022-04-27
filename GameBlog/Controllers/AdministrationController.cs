@@ -10,6 +10,7 @@ namespace GameBlog.Controllers
     using Microsoft.EntityFrameworkCore;
     using static Data.DataConstants.Role;
 
+    [AutoValidateAntiforgeryToken]
     public class AdministrationController : Controller
     {
         private readonly IAdministrationService administrationService;
@@ -41,6 +42,7 @@ namespace GameBlog.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeUserRole(Guid id)
         {
             if (!ModelState.IsValid)

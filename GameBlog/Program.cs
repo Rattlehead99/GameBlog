@@ -21,6 +21,7 @@ public class Program
         .AddScoped<IUsersService, UsersService>()
         .AddScoped<IAdministrationService, AdministrationService>()
         .AddScoped<IPaginationService, PaginationService>()
+        .AddAntiforgery()
         .AddDatabaseDeveloperPageExceptionFilter()
         .AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddRoles<IdentityRole<Guid>>()

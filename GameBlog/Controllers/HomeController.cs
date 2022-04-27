@@ -8,6 +8,7 @@ using System.Diagnostics;
 
 namespace GameBlog.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class HomeController : Controller
     {
         private readonly IArticlesService articlesService;

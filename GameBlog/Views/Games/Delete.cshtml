@@ -1,6 +1,6 @@
 ﻿@model GameViewModel
 
-<form method="post" asp-controller="Games" asp-action="Delete">
+<form method="post" asp-antiforgery="true" asp-controller="Games" asp-action="Delete">
     <div class="border-bottom p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">Delete Game</h2>

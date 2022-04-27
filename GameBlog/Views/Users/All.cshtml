@@ -1,6 +1,6 @@
 ﻿@model AllUsersViewModel
 
-<form method="post" asp-action="All" asp-controller="Users">
+<form method="post" asp-antiforgery="true" asp-action="All" asp-controller="Users">
     <div class="card single_post">
         <div class="card">
             <div class="body search">
@@ -27,7 +27,7 @@
             <div class="mt-5 text-center">
                 <h4 class="mb-0">@user.UserName</h4> <span class="text-muted d-block mb-2">Reputation Points: @user.Reputation</span>
 
-                <form method="post" asp-action="Rate" asp-controller="Users" asp-route-id="@user.Id">
+                <form method="post" asp-antiforgery="true" asp-action="Rate" asp-controller="Users" asp-route-id="@user.Id">
                     <button type="submit" class="btn btn-primary"><span>&#43;</span></button>
                 </form>
                 <div class="d-flex justify-content-between align-items-center mt-4 px-4">
@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="">
-                        <a asp-controller="Users" asp-action="Profile" asp-route-id="@user.Id" class="btn btn-primary">Profile</a>
+                        <a asp-controller="Users" asp-action="Profile" asp-route-id="@user.Id"  class="btn btn-primary">Profile</a>
                     </div>
                 </div>
             </div>
