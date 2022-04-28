@@ -11,10 +11,10 @@ public class Program
         WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
 
         builder.Services.AddDbContext<GameBlogDbContext>(options =>
-            options.UseSqlServer("Server=.;Database=GameBlog;Integrated Security = true;"));
+            options.UseSqlServer(connectionString));
 
         builder.Services.AddScoped<IArticlesService, ArticlesService>()
         .AddScoped<IGamesService, GamesService>()
