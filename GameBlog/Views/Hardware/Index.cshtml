@@ -1,0 +1,94 @@
+﻿@model AllHardwareViewModel
+@inject SignInManager<User> SignInManager;
+@inject UserManager<User> UserManager;
+@using static GameBlog.Data.DataConstants.Role
+
+@{
+    ViewData["Title"] = "Hardware";
+
+    var user = await UserManager.GetUserAsync(User);
+}
+<form method="post" asp-antiforgery="true" asp-action="Index" asp-controller="Hardware">
+    <div class="card single_post">
+        <div class="card">
+            <div class="body search">
+                <div class="input-group m-b-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    </div>
+                    <input type="text" name="searchText" class="form-control" placeholder="Search...">
+                    <input class="btn btn-info" type="submit" value="Search" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (!Model.HardwareModels.Any())
+{
+    <h1>No hardware available right now</h1>
+}
+else
+{
+    <div class="row">
+        <div class="column" style="background-color:#bbb">
+            <h1>GPUs:</h1>
+            @foreach (var gpu in Model.HardwareModels.Where(hm => hm.Type == "GPU"))
+            {
+
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="">
+                        <h3 class="articleHeader d-inline-block mb-2 text-danger">@gpu.Name</h3>
+                    </div>
+
+                    <div>
+                        <label asp-for="@gpu.PerformanceScore">3DMark Performance Score:</label>
+                    </div>
+
+                    <div class="">
+                        <h3 class="d-inline-block mb-2 text-danger">@gpu.PerformanceScore</h3>
+                    </div>
+
+                    @if (User.IsInRole(Administrator))
+                    {
+                        <span class="flex-column">
+                            <a asp-controller="Hardware" asp-action="Edit" asp-route-id="@gpu.Id" class="btn btn-secondary">Edit</a>
+                            <a asp-controller="Hardware" asp-action="Delete" asp-route-id="@gpu.Id" class="btn btn-danger">Delete</a>
+                        </span>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="column" style="background-color:#aaa">
+            <h1>CPUs:</h1>
+            @foreach (var cpu in Model.HardwareModels.Where(hm => hm.Type == "CPU"))
+            {
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <h3 class="d-inline-block mb-2 text-primary">@cpu.Name</h3>
+
+                    <div>
+                        <label asp-for="@cpu.PerformanceScore">3DMark Performance Score:</label>
+                    </div>
+
+                    <div class="">
+                        <h3 class="d-inline-block mb-2 text-primary">@cpu.PerformanceScore</h3>
+                    </div>
+
+                    @if (User.IsInRole(Administrator))
+                    {
+                        <span class="flex-column">
+                            <a asp-controller="Hardware" asp-action="Edit" asp-route-id="@cpu.Id" class="btn btn-secondary">Edit</a>
+                            <a asp-controller="Hardware" asp-action="Delete" asp-route-id="@cpu.Id" class="btn btn-danger">Delete</a>
+                        </span>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <div>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Hardware" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous Page</a>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Hardware" asp-route-pageNumber="@(Model.PageNumber + 1)">Next Page</a>
+    </div>
+}

@@ -1,0 +1,42 @@
+﻿@model HardwareViewModel
+
+<form method="post" asp-antiforgery="true" asp-controller="Hardware" asp-action="Delete">
+    <div class="border-bottom p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Delete Hardware</h2>
+            <hr />
+        </div>
+        
+        <input asp-for="Id" hidden />
+
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" disabled/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PerformanceScore">Performance Score</label>
+            <input asp-for="PerformanceScore" class="form-control"  disabled/>
+            <span asp-validation-for="PerformanceScore" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <select asp-for="Type" disabled>
+                <option value="GPU">GPU</option>
+                <option value="CPU">CPU</option>
+            </select>
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Delete</button>
+        <a asp-controller="Hardware" asp-action="Index" class="btn btn-secondary"> Back to List</a>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}

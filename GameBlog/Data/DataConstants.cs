@@ -54,5 +54,17 @@
         {
             public const string Administrator = "Administrator";
         }
+
+        public class Hardware
+        {
+            public const int MaxPerformance = int.MaxValue;
+            public const int MinPerformance = 0;
+
+            public const int TypeMaxLength = 4;
+            public const int TypeMinLength = 0;
+
+            public const int NameMaxLength = 64;
+            public const int NameMinLength = 2;
+        }
     }
 }

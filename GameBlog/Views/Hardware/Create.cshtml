@@ -1,0 +1,46 @@
+﻿@model HardwareViewModel
+
+<form method="post" asp-antiforgery="true" asp-action="Create">
+    <div class="border-bottom p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Create Hardware</h2>
+            <hr />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PerformanceScore">Performance Score</label>
+            <input asp-for="PerformanceScore" class="form-control" />
+            <span asp-validation-for="PerformanceScore" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <select asp-for="Type">
+                <option value="GPU">GPU</option>
+                <option value="CPU">CPU</option>
+            </select>
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
+
+        @* <div class="mb-3">
+            <label asp-for="Type">Type</label>
+            <textarea asp-for="Type" class="form-control"></textarea>
+            <span asp-validation-for="Type" class="text-danger"></span>
+            </div>*@
+
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-controller="Hardware" asp-action="Index" class="btn btn-secondary"> Back to List</a>
+    </div>
+</form>
+
+@section Scripts
+{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    }
+}

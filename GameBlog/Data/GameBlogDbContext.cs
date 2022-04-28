@@ -17,6 +17,8 @@ namespace GameBlog.Data
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Hardware> Hardware{ get; set; }
+
         public GameBlogDbContext(DbContextOptions<GameBlogDbContext> options)
             : base(options)
         {
