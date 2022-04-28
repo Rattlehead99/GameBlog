@@ -45,54 +45,6 @@ namespace GameBlog.Test.Mock
         {
             this.factory = factor;
             scope = factory.Services.CreateAsyncScope();
-            //CreateService();
         }
-        //public static void CreateService()
-        //{
-        //    //Arrange
-
-        //    Mock<IUserStore<User>> userStoreMock = new Mock<IUserStore<User>>();
-        //    IUserStore<User>? userStore = userStoreMock.Object;
-
-        //    User testUser = new User
-        //    {
-        //        Id = CustomWebApplicationFactory.UserId,
-        //        UserName = "smth@gmail.com",
-        //        Email = "smth@gmail.com",
-        //        NormalizedUserName = "SMTH@GMAIL.COM".Normalize().ToUpperInvariant()
-        //    };
-
-        //    userStoreMock.Setup(x => x.FindByIdAsync(testUser.Id.ToString(), It.IsAny<CancellationToken>())).ReturnsAsync(testUser);
-
-        //    UserManager<User> userManager = new UserManager<User>(userStore, null, null, null, null, null, null, null, null);
-
-        //    var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-        //    var claimsPrincipal = new ClaimsPrincipal(
-        //        new ClaimsIdentity(
-        //            new Claim[] { new Claim(ClaimTypes.NameIdentifier, testUser.Id.ToString()) }
-        //            )
-        //        );
-
-        //    mockHttpContextAccessor.Setup(x => x.HttpContext.User).Returns(claimsPrincipal);
-
-        //    Assert.Equal(testUser.Id.ToString(), mockHttpContextAccessor.Object.HttpContext.User.Claims.FirstOrDefault().Value);
-
-        //    db.Articles.Add(new Article
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        UserId = Guid.Parse("{768CCB3A-C7AC-4141-BC00-5348116856E4}"),
-        //        Content = "Bulshiser that should reach 30 symbols at the very least",
-        //        ImageUrl = "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg",
-        //        Title = "Some dumb title"
-        //    });
-
-        //    db.Users.Add(new User
-        //    {
-        //        Id = CustomWebApplicationFactory.UserId
-        //    });
-        //    db.SaveChanges();
-
-        //    articleService = new ArticlesService(db, userManager, mockHttpContextAccessor.Object);
-        //}
     }
 }

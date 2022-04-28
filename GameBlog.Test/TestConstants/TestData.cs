@@ -13,6 +13,7 @@ namespace GameBlog.Test.TestConstants
         public static readonly Guid ArticleId = Guid.NewGuid();
         public static readonly Guid GameId = Guid.NewGuid();
         public static readonly Guid UserId = Guid.NewGuid();
+        public static readonly Guid HardwareId = Guid.NewGuid();
 
         public static ArticleViewModel ArticleView => new ArticleViewModel()
         {
@@ -109,6 +110,21 @@ namespace GameBlog.Test.TestConstants
             Reputation = 1,
             UserName = "smth@gmail.com"
             
+        };
+
+        public static HardwareViewModel HardwareView => new HardwareViewModel()
+        {
+            Id = HardwareId,
+            Name = "Gtx 980",
+            Type = "GPU",
+            PerformanceScore = 4681
+        };
+
+        public static HardwareViewModel HardwareViewWithoutId => new HardwareViewModel()
+        {
+            Name = "Gtx 980",
+            Type = "GPU",
+            PerformanceScore = 4681
         };
     }
 }

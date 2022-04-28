@@ -36,6 +36,7 @@ namespace GameBlog.Test.Mock
         public static readonly Guid UserId = Guid.NewGuid();
         public static readonly Guid GameId = Guid.NewGuid();
         public static readonly Guid RatingId = Guid.NewGuid();
+        public static readonly Guid HardwareId = Guid.NewGuid();
         private readonly AsyncServiceScope scope;
         protected GameBlogDbContext db;
 

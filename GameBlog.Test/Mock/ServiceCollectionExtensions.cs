@@ -99,6 +99,14 @@ namespace GameBlog.Test.Mock
                     Name = "Super Mario Bros"
                 });
 
+                db.Hardware.Add(new Hardware
+                {
+                    Id = CustomWebApplicationFactory.HardwareId,
+                    Name = "HD 7970Ghz",
+                    PerformanceScore = 2341,
+                    Type = "GPU"
+                });
+
                 var roleName = "Administrator";
 
                 await roleManager.CreateAsync(new IdentityRole<Guid>(roleName));

@@ -32,7 +32,7 @@ else
 {
     <div class="row">
         <div class="column" style="background-color:#bbb">
-            <h1>GPUs:</h1>
+            <h1 class="text-danger">GPUs:</h1>
             @foreach (var gpu in Model.HardwareModels.Where(hm => hm.Type == "GPU"))
             {
 
@@ -61,7 +61,7 @@ else
         </div>
 
         <div class="column" style="background-color:#aaa">
-            <h1>CPUs:</h1>
+            <h1 class="text-primary">CPUs:</h1>
             @foreach (var cpu in Model.HardwareModels.Where(hm => hm.Type == "CPU"))
             {
                 <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
