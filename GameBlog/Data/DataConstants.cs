@@ -29,6 +29,9 @@
             public const int FullNameMinLength = 8;
 
             public const int MinReputation = 0;
+
+            public const int NameMinLength = 3;
+            public const int NameMaxLength = 20;
         }
 
         public class Game

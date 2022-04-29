@@ -11,7 +11,7 @@ public class Program
         WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
+        var connectionString = builder.Configuration.GetConnectionString("Server=gameblog.database.windows.net;Database=GameBlog;User Id=rattlehead99;Password=Naviman12#;");
 
         builder.Services.AddDbContext<GameBlogDbContext>(options =>
             options.UseSqlServer(connectionString));
