@@ -14,7 +14,7 @@ public class Program
         var connectionString = builder.Configuration.GetConnectionString("Server=gameblog.database.windows.net;Database=GameBlog;User Id=rattlehead99;Password=Naviman12#;");
 
         builder.Services.AddDbContext<GameBlogDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer("Server=gameblog.database.windows.net;Database=GameBlog;User Id=rattlehead99;Password=Naviman12#;"));
 
         builder.Services.AddScoped<IArticlesService, ArticlesService>()
         .AddScoped<IGamesService, GamesService>()
