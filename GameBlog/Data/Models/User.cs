@@ -12,10 +12,6 @@
         [Range(MinReputation, int.MaxValue)]
         public int Reputation { get; set; }
 
-        [Required]
-        [StringLength(NameMaxLength)]
-        public string Name { get; set; }
-
         [NotMapped]
         public ICollection<UserReputations> UserReputations { get; set; } = new List<UserReputations>();
 
