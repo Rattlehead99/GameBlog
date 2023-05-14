@@ -11,12 +11,16 @@ public class Program
         WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        var connectionString = builder.Configuration.GetConnectionString("Server=gameblog.database.windows.net;Database=GameBlog;User Id=rattlehead99;Password=Naviman12#;");
+        //var connectionString = builder.Configuration.GetConnectionString("Server=gameblog.database.windows.net;Database=GameBlog;User Id=rattlehead99;Password=Naviman12#;");
+        var connectionString = builder.Configuration.GetConnectionString("Server=localhost,1433;Database=GameBlog;MultipleActiveResultSets=true;User ID=sa;Password=yourStrong(!)Password");
 
+        //builder.Services.AddDbContext<GameBlogDbContext>(options =>
+       //     options.UseSqlServer("Server=gameblog.database.windows.net;Database=GameBlog;User Id=rattlehead99;Password=Naviman12#;"));
         builder.Services.AddDbContext<GameBlogDbContext>(options =>
-            options.UseSqlServer("Server=gameblog.database.windows.net;Database=GameBlog;User Id=rattlehead99;Password=Naviman12#;"));
+            options.UseSqlServer("Server=localhost,1433;Database=GameBlog;MultipleActiveResultSets=true;User ID=sa;Password=yourStrong(!)Password"));
 
-        builder.Services.AddScoped<IArticlesService, ArticlesService>()
+        builder.Services
+        .AddScoped<IArticlesService, ArticlesService>()
         .AddScoped<IGamesService, GamesService>()
         .AddScoped<IUsersService, UsersService>()
         .AddScoped<IAdministrationService, AdministrationService>()
